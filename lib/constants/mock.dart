@@ -2,7 +2,7 @@ import 'package:flutter_tips_app/data/models/employee.dart';
 
 List<Employee> mockEmployees = [
   Employee(
-    name: "Иван",
+    name: "Тимур",
     team: "57481236",
     tipsAmount: 8000,
     advance: 0,
@@ -11,7 +11,7 @@ List<Employee> mockEmployees = [
     percent: 1.0,
   ),
   Employee(
-    name: "Александра",
+    name: "Арутик",
     team: "57481236",
     tipsAmount: 16000,
     advance: 500,
@@ -20,7 +20,7 @@ List<Employee> mockEmployees = [
     percent: 1.0,
   ),
   Employee(
-    name: "Дмитрий",
+    name: "Стас",
     team: "57481236",
     tipsAmount: 11000,
     advance: 1000,
@@ -29,7 +29,7 @@ List<Employee> mockEmployees = [
     percent: 1.0,
   ),
   Employee(
-    name: "Екатерина",
+    name: "Влад",
     team: "57481236",
     tipsAmount: 20000,
     advance: 1500,
@@ -38,7 +38,7 @@ List<Employee> mockEmployees = [
     percent: 0.7,
   ),
   Employee(
-    name: "Михаил",
+    name: "Саша",
     team: "57481236",
     tipsAmount: 23000,
     advance: 2000,

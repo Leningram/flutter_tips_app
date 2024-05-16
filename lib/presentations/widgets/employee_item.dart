@@ -13,6 +13,74 @@ class EmployeeItem extends StatefulWidget {
 class _EmployeeItemState extends State<EmployeeItem> {
   @override
   Widget build(BuildContext context) {
-    return Text(widget.employeeData.name);
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.employeeData.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
+                      const SizedBox(height: 3,),
+                      Row(
+                        children: [
+                          const Icon(Icons.watch_later_outlined),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            widget.employeeData.hours.toString(),
+                            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        widget.employeeData.tipsAmount.toString(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                       const SizedBox(
+                        height: 3,
+                      ),
+                      Row(
+                        children: [
+                          const Text(
+                            'аванс ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(120, 0, 0, 0),
+                            ),
+                          ),
+                          Text(
+                            widget.employeeData.advance.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(120, 0, 0, 0),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+        const Divider(
+          height: 1,
+        ),
+      ],
+    );
   }
 }
