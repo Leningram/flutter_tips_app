@@ -47,3 +47,13 @@ List<Employee> mockEmployees = [
     percent: 1.0,
   ),
 ];
+
+Employee mockUser = Employee(
+  name: 'Длинноеимяпользователя',
+  team: '57481236',
+  tipsAmount: 24500,
+  advance: 12200,
+  hours: 45,
+  image: 'https://example.com/image5.jpg',
+  percent: 1.0,
+);
