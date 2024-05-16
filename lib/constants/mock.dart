@@ -1,4 +1,4 @@
-import 'package:flutter_tips_app/data/models/Employee.dart';
+import 'package:flutter_tips_app/data/models/employee.dart';
 
 List<Employee> mockEmployees = [
   Employee(

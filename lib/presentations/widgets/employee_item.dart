@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tips_app/data/models/employee.dart';
 
 class EmployeeItem extends StatefulWidget {
-  const EmployeeItem({super.key});
+  const EmployeeItem({required this.employeeData, super.key});
+
+  final Employee employeeData;
 
   @override
   State<EmployeeItem> createState() => _EmployeeItemState();
@@ -10,6 +13,6 @@ class EmployeeItem extends StatefulWidget {
 class _EmployeeItemState extends State<EmployeeItem> {
   @override
   Widget build(BuildContext context) {
-    return const Text('Employee');
+    return Text(widget.employeeData.name);
   }
 }
