@@ -7,12 +7,13 @@ import 'package:flutter_tips_app/presentations/widgets/user_info.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:flutter_tips_app/providers/user_provider.dart';
 
-class StartScreen extends ConsumerWidget {
-  const StartScreen({super.key});
+class MainScreen extends ConsumerWidget {
+  const MainScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(teamProvider.notifier).setTeam(mockEmployees);
       ref.read(userProvider.notifier).setUserById('Тимур');
     });
@@ -31,7 +32,7 @@ class StartScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tips App'),
+        title: const Text('Таблица'),
         actions: [
           IconButton(
               onPressed: () {
@@ -44,21 +45,11 @@ class StartScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (user != null) UserInfo(user: user),
-          
           const Divider(
             height: 1,
             thickness: 2,
           ),
           EmployeeList(employees: employees)
-        ],
-      ),
-       bottomNavigationBar: BottomNavigationBar(
-        onTap: (page) {},
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.list), label: 'Таблица'),
-          BottomNavigationBarItem(icon: Icon(Icons.all_inbox_outlined), label: 'Ячейка'),
         ],
       ),
     );

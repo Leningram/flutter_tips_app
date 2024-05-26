@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
+import 'package:flutter_tips_app/data/utils/formatters.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_info.dart';
 
 class EmployeeItem extends StatefulWidget {
@@ -98,7 +99,7 @@ class _EmployeeItemState extends State<EmployeeItem> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            widget.employeeData.tipsAmount.toString(),
+                            formatNumber(widget.employeeData.tipsAmount).toString(),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
@@ -108,14 +109,14 @@ class _EmployeeItemState extends State<EmployeeItem> {
                           Row(
                             children: [
                               const Text(
-                                'аванс ',
+                                'аванс: ',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(120, 0, 0, 0),
                                 ),
                               ),
                               Text(
-                                widget.employeeData.advance.toString(),
+                                formatNumber(widget.employeeData.advance).toString(),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(120, 0, 0, 0),

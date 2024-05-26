@@ -19,3 +19,15 @@ const TextStyle titleText1 = TextStyle(
   height: 1.0,
   color: Colors.white,
 );
+
+const TextStyle currencyText1 = TextStyle(
+  fontSize: 18,
+  height: 1.0,
+  color: Color.fromARGB(255, 68, 68, 68)
+);
+
+const TextStyle currencyText2 = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+  height: 1.0,
+);

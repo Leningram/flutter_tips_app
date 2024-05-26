@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/presentations/pages/start_screen.dart';
+import 'package:flutter_tips_app/presentations/pages/main_screen.dart';
+import 'package:flutter_tips_app/presentations/pages/tabs.dart';
 
 var kColorScheme =
     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 42, 101, 183));
@@ -40,7 +41,7 @@ void main() {
               ),
             ),
       ),
-      home: const StartScreen(),
+      home: const TabsScreen(),
     ),
   ));
 }
