@@ -52,6 +52,15 @@ class StartScreen extends ConsumerWidget {
           EmployeeList(employees: employees)
         ],
       ),
+       bottomNavigationBar: BottomNavigationBar(
+        onTap: (page) {},
+        currentIndex: 0,
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.list), label: 'Таблица'),
+          BottomNavigationBarItem(icon: Icon(Icons.all_inbox_outlined), label: 'Ячейка'),
+        ],
+      ),
     );
   }
 }
