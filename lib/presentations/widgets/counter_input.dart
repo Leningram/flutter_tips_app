@@ -66,7 +66,7 @@ class _CounterInputState extends State<CounterInput> {
             decoration: widget.label != null ? InputDecoration(
               counterText: '',
               label: Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: Text(widget.label!),
               ),
             ) : const InputDecoration(),

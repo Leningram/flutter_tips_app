@@ -10,11 +10,11 @@ class CellScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ячейка'),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(20.0),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Card(
+            const Card(
               child: Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Column(
@@ -87,10 +87,10 @@ class CellScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            Card(
+            const Card(
               child: Padding(
                   padding: EdgeInsets.all(12.0),
                   child: Column(children: [
@@ -133,6 +133,19 @@ class CellScreen extends StatelessWidget {
                               Text('1290', style: currencyText1),
                             ])),
                   ])),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.errorContainer),
+              child: Text(
+                'Сбросить',
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             )
           ],
         ),
