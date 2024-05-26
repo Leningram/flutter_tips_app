@@ -40,14 +40,7 @@ void main() {
               ),
             ),
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Tips App'),
-          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.add))],
-        ),
-        body: StartScreen(
-        ),
-      ),
+      home: const StartScreen(),
     ),
   ));
 }
