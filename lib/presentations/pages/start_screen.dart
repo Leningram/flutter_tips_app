@@ -44,9 +44,7 @@ class StartScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (user != null) UserInfo(user: user),
-          const SizedBox(
-            height: 20,
-          ),
+          
           const Divider(
             height: 1,
             thickness: 2,
