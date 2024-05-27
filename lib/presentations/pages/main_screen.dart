@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/constants/mock.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
 import 'package:flutter_tips_app/presentations/widgets/user_info.dart';
@@ -13,11 +12,7 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(teamProvider.notifier).setTeam(mockEmployees);
-      ref.read(userProvider.notifier).setUserById('Тимур');
-    });
-    final employees = ref.watch(teamProvider);
+    final team = ref.watch(teamProvider);
     final user = ref.watch(userProvider);
 
     void openAddEmployee() {
@@ -49,7 +44,7 @@ class MainScreen extends ConsumerWidget {
             height: 1,
             thickness: 2,
           ),
-          EmployeeList(employees: employees)
+          EmployeeList(employees: team.employees)
         ],
       ),
     );

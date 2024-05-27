@@ -42,7 +42,7 @@ class UserInfo extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    formatNumber(user.tipsAmount),
+                    formatNumber(user.calculateEarnings()),
                     style: titleText1,
                   ),
                   const SizedBox(

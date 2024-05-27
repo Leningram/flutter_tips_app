@@ -99,7 +99,7 @@ class _EmployeeItemState extends State<EmployeeItem> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            formatNumber(widget.employeeData.tipsAmount).toString(),
+                            formatNumber(widget.employeeData.calculateEarnings()).toString(),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),

@@ -32,7 +32,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(teamProvider.notifier).setTeam(mockEmployees);
+      ref.read(teamProvider.notifier).setTeam(mockTeam);
       ref.read(userProvider.notifier).setUserById('Тимур');
     });
 
