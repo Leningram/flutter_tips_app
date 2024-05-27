@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/presentations/widgets/money_info.dart';
+import 'package:flutter_tips_app/presentations/widgets/money_edit.dart';
+import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:flutter_tips_app/styles/text.styles.dart';
 
@@ -10,10 +11,16 @@ class CellScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final team = ref.watch(teamProvider);
-    final currencies = team.currencies;
 
     void editTeamMoney(String method) {
       Navigator.of(context).pop();
+      showModalBottomSheet(
+        constraints: const BoxConstraints(maxWidth: 900),
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) => MoneyEdit(isEdit: method == 'edit',),
+      );
     }
 
     Future<void> showMoneyAddChoice(BuildContext context) {
@@ -65,7 +72,14 @@ class CellScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              MoneyInfo(team: team),
+              ListInfo(
+                  items: [
+                InfoListItem(
+                    label: team.mainCurrencyName, value: team.mainCurrencySum),
+                ...team.currencies.map((el) {
+                  return InfoListItem(label: el.name, value: el.amount);
+                })
+              ].toList()),
               const SizedBox(
                 height: 30,
               ),

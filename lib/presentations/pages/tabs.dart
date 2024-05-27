@@ -40,7 +40,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
+        enableFeedback: true,
         currentIndex: _selectedPageIndex,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Таблица'),
           BottomNavigationBarItem(
