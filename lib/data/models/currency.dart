@@ -1,7 +1,7 @@
 class Currency {
   final String name;
   final int rate;
-  final int amount;
+  int amount;
 
   Currency({
     required this.name,

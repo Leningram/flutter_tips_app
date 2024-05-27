@@ -5,9 +5,9 @@ class Team {
   final String name;
   final String admin;
   final String mainCurrencyName;
-  final int mainCurrencySum;
-  final List<Currency> currencies;
-  final List<Employee> employees;
+  int mainCurrencySum;
+  List<Currency> currencies;
+  List<Employee> employees;
 
   Team({
     required this.name,
@@ -36,5 +36,15 @@ class Team {
       totalHours += employee.hours;
     }
     return totalHours;
+  }
+
+  void addMoney(Map<String, int> moneyData) {
+    moneyData.forEach((currencyName, amountToAdd) {
+      final currency = currencies.firstWhere((c) => c.name == currencyName);
+      if (!currencies.contains(currency)) {
+        return;
+      }
+      currency.amount += amountToAdd;
+    });
   }
 }

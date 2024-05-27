@@ -48,9 +48,6 @@ class _EmployeeItemState extends State<EmployeeItem> {
           );
         });
   }
-  // showModalBottomSheet(
-  //     context: context,
-  //     builder: (ctx) => EmployeeInfo(employee: widget.employeeData,));
 
   @override
   Widget build(BuildContext context) {

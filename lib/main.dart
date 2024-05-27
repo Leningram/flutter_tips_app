@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/presentations/pages/main_screen.dart';
 import 'package:flutter_tips_app/presentations/pages/tabs.dart';
 
 var kColorScheme =
