@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
-import 'package:flutter_tips_app/utils/formatters.dart';
 
 class MoneyEdit extends ConsumerStatefulWidget {
   const MoneyEdit({super.key, required this.isEdit});
 
   final bool isEdit;
+  @override
   ConsumerState<MoneyEdit> createState() {
     return _MoneyEditState();
   }
@@ -16,9 +16,34 @@ class MoneyEdit extends ConsumerStatefulWidget {
 class _MoneyEditState extends ConsumerState<MoneyEdit> {
   final _mainCurrencyAmountController = TextEditingController();
   List<Currency> currencies = [];
+  late List<TextEditingController> _currencyControllers;
+
   @override
-  initState() {
+  void initState() {
     super.initState();
+    _currencyControllers = [];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final team = ref.watch(teamProvider);
+    if (_currencyControllers.isEmpty) {
+      _currencyControllers = List.generate(
+        team.currencies.length,
+        (index) => TextEditingController(),
+      );
+    }
+    _mainCurrencyAmountController.text = team.mainCurrencySum.toString();
+  }
+
+  @override
+  void dispose() {
+    _mainCurrencyAmountController.dispose();
+    for (var controller in _currencyControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -36,7 +61,7 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                 child: Column(
                   children: [
                     Text(
-                      widget.isEdit ? 'Изменить сумму': 'Добавить сумму',
+                      widget.isEdit ? 'Изменить сумму' : 'Добавить сумму',
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge!
@@ -49,10 +74,48 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                       controller: _mainCurrencyAmountController,
                       maxLength: 6,
                       keyboardType: TextInputType.number,
+                      textAlign: TextAlign.right,
                       decoration: InputDecoration(
-                        label: Text(capitalize(team.mainCurrencyName)),
+                        counterText: '',
+                        label: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(team.mainCurrencyName),
+                        ),
                       ),
                     ),
+                    ...List.generate(
+                      team.currencies.length,
+                      (index) {
+                        final currency = team.currencies[index];
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: TextField(
+                            controller: _currencyControllers[index],
+                            textAlign: TextAlign.right,
+                            maxLength: 6,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              counterText: '',
+                              label: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(currency.name),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(onPressed: () {}, child: Text('Отмена', style: TextStyle(color: Theme.of(context).colorScheme.error.withAlpha(230), fontSize: 16))),
+                        const SizedBox(width: 20,),
+                        TextButton(onPressed: () {}, child:const Text('Ok', style: TextStyle(fontSize: 16),))
+                      ],
+                    )
                   ],
                 ),
               ),
