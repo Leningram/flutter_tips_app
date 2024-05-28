@@ -20,9 +20,11 @@ class TeamNotifier extends StateNotifier<Team> {
   }
 
   Employee? getEmployeeByName(String name) {
-    return state.employees.firstWhereOrNull((employee) => employee.name == name);
+    return state.employees
+        .firstWhereOrNull((employee) => employee.name == name);
   }
-void addMoney(Map<String, int> moneyData) {
+
+  void addMoney(Map<String, int> moneyData) {
     var newState = Team(
       name: state.name,
       admin: state.admin,
@@ -32,27 +34,62 @@ void addMoney(Map<String, int> moneyData) {
       employees: List.from(state.employees),
     );
 
-  if (moneyData.containsKey(newState.mainCurrencyName)) {
-    newState.mainCurrencySum += moneyData[newState.mainCurrencyName]!;
+    if (moneyData.containsKey(newState.mainCurrencyName)) {
+      newState.mainCurrencySum += moneyData[newState.mainCurrencyName]!;
+    }
+
+    for (var entry in moneyData.entries) {
+      var currencyName = entry.key;
+      var amountToAdd = entry.value;
+
+      var currency = newState.currencies.firstWhere(
+        (c) => c.name == currencyName,
+        orElse: () => Currency(name: currencyName, rate: 1, amount: 0),
+      );
+
+      if (currency.name == currencyName) {
+        currency.amount += amountToAdd;
+      } else {
+        newState.currencies
+            .add(Currency(name: currencyName, rate: 1, amount: amountToAdd));
+      }
+    }
+    newState.countEmployeesMoney();
+    state = newState;
   }
 
-  for (var entry in moneyData.entries) {
-    var currencyName = entry.key;
-    var amountToAdd = entry.value;
-
-    var currency = newState.currencies.firstWhere(
-      (c) => c.name == currencyName,
-      orElse: () => Currency(name: currencyName, rate: 1, amount: 0),
+  void setMoney(Map<String, int> moneyData) {
+    var newState = Team(
+      name: state.name,
+      admin: state.admin,
+      mainCurrencyName: state.mainCurrencyName,
+      mainCurrencySum: 0,
+      currencies: List.from(state.currencies),
+      employees: List.from(state.employees),
     );
 
-    if (currency.name == currencyName) {
-      currency.amount += amountToAdd;
-    } else {
-      newState.currencies.add(Currency(name: currencyName, rate: 1, amount: amountToAdd));
+    if (moneyData.containsKey(newState.mainCurrencyName)) {
+      newState.mainCurrencySum += moneyData[newState.mainCurrencyName]!;
     }
-  }
 
-  state = newState;
+    for (var entry in moneyData.entries) {
+      var currencyName = entry.key;
+      var amountToAdd = entry.value;
+
+      var currency = newState.currencies.firstWhere(
+        (c) => c.name == currencyName,
+        orElse: () => Currency(name: currencyName, rate: 1, amount: 0),
+      );
+
+      if (currency.name == currencyName) {
+        currency.amount = amountToAdd;
+      } else {
+        newState.currencies
+            .add(Currency(name: currencyName, rate: 1, amount: amountToAdd));
+      }
+    }
+    newState.countEmployeesMoney();
+    state = newState;
   }
 }
 

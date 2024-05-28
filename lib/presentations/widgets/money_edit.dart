@@ -57,7 +57,7 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     Navigator.of(context).pop();
   }
 
-  void _handleOk() {
+  void addMoney() {
     final teamNotifier = ref.read(teamProvider.notifier);
 
     final mainCurrencyAmount =
@@ -71,8 +71,30 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     }
 
     teamNotifier.addMoney(moneyData);
-    print(moneyData);
+  }
 
+  void setMoney() {
+    final teamNotifier = ref.read(teamProvider.notifier);
+
+    final mainCurrencyAmount =
+        int.tryParse(_mainCurrencyAmountController.text) ?? 0;
+    final moneyData = {teamNotifier.state.mainCurrencyName: mainCurrencyAmount};
+
+    for (var i = 0; i < teamNotifier.state.currencies.length; i++) {
+      final currency = teamNotifier.state.currencies[i];
+      final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
+      moneyData[currency.name] = amount;
+    }
+
+    teamNotifier.setMoney(moneyData);
+  }
+
+  void _handleOk() {
+    if (widget.isEdit) {
+      setMoney();
+    } else {
+      addMoney();
+    }
     _handleClose();
   }
 

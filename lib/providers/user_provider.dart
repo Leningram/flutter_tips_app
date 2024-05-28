@@ -9,6 +9,7 @@ final Employee userDefaultData = Employee(
   hours: 0,
   image: '',
   percent: 0.0,
+  totalTips: 0,
 );
 
 class UserNotifier extends StateNotifier<Employee?> {

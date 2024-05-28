@@ -17,9 +17,7 @@ class Team {
     required this.currencies,
     required this.employees,
   }) {
-    for (var employee in employees) {
-      employee.team = this;
-    }
+    countEmployeesMoney(); // Вызов метода после инициализации
   }
 
   int getTeamTotal() {
@@ -38,25 +36,17 @@ class Team {
     return totalHours;
   }
 
-  void addMoney(Map<String, int> moneyData) {
-    if (moneyData.containsKey(mainCurrencyName)) {
-      mainCurrencySum += moneyData[mainCurrencyName]!;
+  void countEmployeesMoney() {
+    int currenciesSum = 0;
+    int totalHours = employees.fold(0, (sum, employee) => sum + employee.hours);
+    for (final currency in currencies) {
+      currenciesSum += currency.amount * currency.rate;
     }
-
-    for (var entry in moneyData.entries) {
-      var currencyName = entry.key;
-      var amountToAdd = entry.value;
-
-      var currency = currencies.firstWhere(
-        (c) => c.name == currencyName,
-        orElse: () => Currency(name: currencyName, rate: 1, amount: 0),
-      );
-
-      if (currency.name == currencyName) {
-        currency.amount += amountToAdd;
-      } else {
-        currencies
-            .add(Currency(name: currencyName, rate: 1, amount: amountToAdd));
+    int totalMoney = currenciesSum + mainCurrencySum;
+    if (totalHours != 0) {
+      int perHour = ((totalMoney / totalHours).floor() ~/ 10) * 10;
+      for (final employee in employees) {
+        employee.setTotalTips(perHour);
       }
     }
   }
