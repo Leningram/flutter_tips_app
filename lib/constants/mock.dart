@@ -2,15 +2,15 @@ import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
 
-Currency dollar = Currency(name: 'доллары', rate: 91, amount: 0);
-Currency euro = Currency(name: 'евро', rate: 96, amount: 0);
-Currency pounds = Currency(name: 'фунты', rate: 116, amount: 0);
+Currency dollar = Currency(name: 'доллары', rate: 91, amount: 10);
+Currency euro = Currency(name: 'евро', rate: 96, amount: 20);
+Currency pounds = Currency(name: 'фунты', rate: 116, amount: 30);
 
 Team mockTeam = Team(
     name: 'FS',
     admin: 'Тимур',
     mainCurrencyName: 'рубли',
-    mainCurrencySum: 0,
+    mainCurrencySum: 11120,
     currencies: [dollar, euro, pounds],
     employees: mockEmployees);
 

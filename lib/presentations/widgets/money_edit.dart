@@ -33,8 +33,15 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
         team.currencies.length,
         (index) => TextEditingController(),
       );
+      if (widget.isEdit) {
+        for (var i = 0; i < team.currencies.length; i++) {
+          _currencyControllers[i].text = team.currencies[i].amount.toString();
+        }
+      }
     }
-    _mainCurrencyAmountController.text = team.mainCurrencySum.toString();
+    if (widget.isEdit) {
+      _mainCurrencyAmountController.text = team.mainCurrencySum.toString();
+    }
   }
 
   @override
@@ -46,11 +53,33 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     super.dispose();
   }
 
+  void _handleClose() {
+    Navigator.of(context).pop();
+  }
+
+  void _handleOk() {
+    final teamNotifier = ref.read(teamProvider.notifier);
+
+    final mainCurrencyAmount =
+        int.tryParse(_mainCurrencyAmountController.text) ?? 0;
+    final moneyData = {teamNotifier.state.mainCurrencyName: mainCurrencyAmount};
+
+    for (var i = 0; i < teamNotifier.state.currencies.length; i++) {
+      final currency = teamNotifier.state.currencies[i];
+      final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
+      moneyData[currency.name] = amount;
+    }
+
+    teamNotifier.addMoney(moneyData);
+    print(moneyData);
+
+    _handleClose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     final team = ref.watch(teamProvider);
-    _mainCurrencyAmountController.text = team.mainCurrencySum.toString();
     return LayoutBuilder(
       builder: (builder, constraints) {
         return SizedBox(
@@ -111,9 +140,28 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextButton(onPressed: () {}, child: Text('Отмена', style: TextStyle(color: Theme.of(context).colorScheme.error.withAlpha(230), fontSize: 16))),
-                        const SizedBox(width: 20,),
-                        TextButton(onPressed: () {}, child:const Text('Ok', style: TextStyle(fontSize: 16),))
+                        TextButton(
+                            onPressed: () {
+                              _handleClose();
+                            },
+                            child: Text('Отмена',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .error
+                                        .withAlpha(230),
+                                    fontSize: 16))),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              _handleOk();
+                            },
+                            child: const Text(
+                              'Ok',
+                              style: TextStyle(fontSize: 16),
+                            ))
                       ],
                     )
                   ],

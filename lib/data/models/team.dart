@@ -39,12 +39,25 @@ class Team {
   }
 
   void addMoney(Map<String, int> moneyData) {
-    moneyData.forEach((currencyName, amountToAdd) {
-      final currency = currencies.firstWhere((c) => c.name == currencyName);
-      if (!currencies.contains(currency)) {
-        return;
+    if (moneyData.containsKey(mainCurrencyName)) {
+      mainCurrencySum += moneyData[mainCurrencyName]!;
+    }
+
+    for (var entry in moneyData.entries) {
+      var currencyName = entry.key;
+      var amountToAdd = entry.value;
+
+      var currency = currencies.firstWhere(
+        (c) => c.name == currencyName,
+        orElse: () => Currency(name: currencyName, rate: 1, amount: 0),
+      );
+
+      if (currency.name == currencyName) {
+        currency.amount += amountToAdd;
+      } else {
+        currencies
+            .add(Currency(name: currencyName, rate: 1, amount: amountToAdd));
       }
-      currency.amount += amountToAdd;
-    });
+    }
   }
 }
