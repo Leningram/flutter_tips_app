@@ -59,13 +59,14 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
 
   void addMoney() {
     final teamNotifier = ref.read(teamProvider.notifier);
+    final team = ref.read(teamProvider);
 
     final mainCurrencyAmount =
         int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-    final moneyData = {teamNotifier.state.mainCurrencyName: mainCurrencyAmount};
+    final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
 
-    for (var i = 0; i < teamNotifier.state.currencies.length; i++) {
-      final currency = teamNotifier.state.currencies[i];
+    for (var i = 0; i < team.currencies.length; i++) {
+      final currency = team.currencies[i];
       final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
       moneyData[currency.name] = amount;
     }
@@ -75,13 +76,14 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
 
   void setMoney() {
     final teamNotifier = ref.read(teamProvider.notifier);
+    final team = ref.read(teamProvider);
 
     final mainCurrencyAmount =
         int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-    final moneyData = {teamNotifier.state.mainCurrencyName: mainCurrencyAmount};
+    final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
 
-    for (var i = 0; i < teamNotifier.state.currencies.length; i++) {
-      final currency = teamNotifier.state.currencies[i];
+    for (var i = 0; i < team.currencies.length; i++) {
+      final currency = team.currencies[i];
       final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
       moneyData[currency.name] = amount;
     }

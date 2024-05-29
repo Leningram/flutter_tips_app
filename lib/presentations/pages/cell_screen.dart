@@ -19,8 +19,48 @@ class CellScreen extends ConsumerWidget {
         useSafeArea: true,
         isScrollControlled: true,
         context: context,
-        builder: (ctx) => MoneyEdit(isEdit: method == 'edit',),
+        builder: (ctx) => MoneyEdit(
+          isEdit: method == 'edit',
+        ),
       );
+    }
+
+    void resetTeamMoney() {
+      final teamNotifier = ref.read(teamProvider.notifier);
+      final team = ref.read(teamProvider);
+      final moneyData = {team.mainCurrencyName: 0};
+      for (var i = 0; i < team.currencies.length; i++) {
+        final currency = team.currencies[i];
+        const amount = 0;
+        moneyData[currency.name] = amount;
+      }
+      teamNotifier.setMoney(moneyData);
+    }
+
+    void showResetConfirmation() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('asdasd'),
+              content: const Text('Подтвердите сброс'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Закрыть диалог
+                  },
+                  child: const Text('Отмена'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    resetTeamMoney();
+                    Navigator.of(context).pop(); // Закрыть диалог
+                  },
+                  child: const Text('Да'),
+                ),
+              ],
+            );
+          });
     }
 
     Future<void> showMoneyAddChoice(BuildContext context) {
@@ -131,7 +171,7 @@ class CellScreen extends ConsumerWidget {
                 height: 40,
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: showResetConfirmation,
                 style: ElevatedButton.styleFrom(
                     backgroundColor:
                         Theme.of(context).colorScheme.errorContainer),

@@ -63,13 +63,15 @@ class _CounterInputState extends State<CounterInput> {
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
             onChanged: (value) {},
-            decoration: widget.label != null ? InputDecoration(
-              counterText: '',
-              label: Align(
-                alignment: Alignment.center,
-                child: Text(widget.label!),
-              ),
-            ) : const InputDecoration(),
+            decoration: widget.label != null
+                ? InputDecoration(
+                    counterText: '',
+                    label: Align(
+                      alignment: Alignment.center,
+                      child: Text(widget.label!),
+                    ),
+                  )
+                : const InputDecoration(),
           ),
         ),
         IconButton(

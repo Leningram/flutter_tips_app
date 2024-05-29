@@ -17,6 +17,17 @@ class Team {
     required this.currencies,
     required this.employees,
   }) {
+    employees = employees
+        .map((e) => Employee(
+              name: e.name,
+              advance: e.advance,
+              hours: e.hours,
+              image: e.image,
+              percent: e.percent,
+              totalTips: e.totalTips,
+              team: this, // Передаем текущий объект Team
+            ))
+        .toList();
     countEmployeesMoney(); // Вызов метода после инициализации
   }
 
@@ -44,7 +55,7 @@ class Team {
     }
     int totalMoney = currenciesSum + mainCurrencySum;
     if (totalHours != 0) {
-      int perHour = ((totalMoney / totalHours).floor() ~/ 10) * 10;
+      double perHour = totalMoney / totalHours;
       for (final employee in employees) {
         employee.setTotalTips(perHour);
       }
