@@ -182,9 +182,9 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                             onPressed: () {
                               _handleOk();
                             },
-                            child: const Text(
-                              'Ok',
-                              style: TextStyle(fontSize: 16),
+                            child: Text(
+                              widget.isEdit ? 'Сохранить' : 'Добавить',
+                              style: const TextStyle(fontSize: 16),
                             ))
                       ],
                     )

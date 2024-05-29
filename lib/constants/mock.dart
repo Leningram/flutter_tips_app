@@ -2,9 +2,9 @@ import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
 
-Currency dollar = Currency(name: 'доллары', rate: 91, amount: 10);
-Currency euro = Currency(name: 'евро', rate: 96, amount: 20);
-Currency pounds = Currency(name: 'фунты', rate: 116, amount: 30);
+Currency dollar = Currency(name: 'доллары', rate: 91, amount: 0);
+Currency euro = Currency(name: 'евро', rate: 96, amount: 0);
+Currency pounds = Currency(name: 'фунты', rate: 116, amount: 0);
 
 Team mockTeam = Team(
     name: 'FS',
@@ -26,7 +26,7 @@ List<Employee> mockEmployees = [
   Employee(
     name: "Арутик",
     advance: 0,
-    hours: 45,
+    hours: 0,
     image: "https://example.com/image2.jpg",
     percent: 1.0,
     totalTips: 0,
@@ -34,7 +34,7 @@ List<Employee> mockEmployees = [
   Employee(
     name: "Стас",
     advance: 0,
-    hours: 44,
+    hours: 0,
     image: "https://example.com/image3.jpg",
     percent: 1.0,
     totalTips: 0,
@@ -42,7 +42,7 @@ List<Employee> mockEmployees = [
   Employee(
     name: "Влад",
     advance: 0,
-    hours: 25,
+    hours: 0,
     image: "https://example.com/image4.jpg",
     percent: 1.0,
     totalTips: 0,
@@ -58,15 +58,15 @@ List<Employee> mockEmployees = [
   Employee(
     name: "Денис",
     advance: 0,
-    hours: 45,
+    hours: 0,
     image: "https://example.com/image5.jpg",
     percent: 1.0,
     totalTips: 0,
   ),
   Employee(
     name: "Илья",
-    advance: 10000,
-    hours: 50,
+    advance: 0,
+    hours: 0,
     image: "https://example.com/image5.jpg",
     percent: 1.0,
     totalTips: 0,
@@ -74,15 +74,15 @@ List<Employee> mockEmployees = [
   Employee(
     name: "Руслан",
     advance: 0,
-    hours: 45,
+    hours: 0,
     image: "https://example.com/image5.jpg",
     percent: 1.0,
     totalTips: 0,
   ),
   Employee(
     name: "Максим",
-    advance: 1000,
-    hours: 45,
+    advance: 0,
+    hours: 0,
     image: "https://example.com/image5.jpg",
     percent: 1.0,
     totalTips: 0,

@@ -42,8 +42,9 @@ class CellScreen extends ConsumerWidget {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('asdasd'),
-              content: const Text('Подтвердите сброс'),
+              title: const Text('Подтвердите сброс'),
+              content: const Text('Обнулить данные?', style: TextStyle(fontSize: 16)),
+              // TODO сбросить часы, задавать в настройках кол-во часов после сброса
               actions: [
                 TextButton(
                   onPressed: () {
@@ -123,47 +124,47 @@ class CellScreen extends ConsumerWidget {
               const SizedBox(
                 height: 30,
               ),
-              const Card(
+              Card(
                 child: Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Column(children: [
                       Padding(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                              const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Остаток:', style: currencyText1),
-                                SizedBox(
+                                const Text('Остаток:', style: currencyText1),
+                                const SizedBox(
                                   width: 5,
                                 ),
-                                Text('1290', style: currencyText1),
+                                Text(team.getRemainders().toString(), style: currencyText1),
                               ])),
-                      Divider(height: 1, thickness: 2),
+                      const Divider(height: 1, thickness: 2),
                       Padding(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                              const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Всего часов:', style: currencyText1),
-                                SizedBox(
+                                const Text('Всего часов:', style: currencyText1),
+                                const SizedBox(
                                   width: 5,
                                 ),
-                                Text('129', style: currencyText1),
+                                Text(team.getTotalHours().toString(), style: currencyText1),
                               ])),
-                      Divider(height: 1, thickness: 2),
+                      const Divider(height: 1, thickness: 2),
                       Padding(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                              const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('За один час:', style: currencyText1),
-                                SizedBox(
+                                const Text('За один час:', style: currencyText1),
+                                const SizedBox(
                                   width: 5,
                                 ),
-                                Text('1290', style: currencyText1),
+                                Text(team.getPerHour().truncate().toString(), style: currencyText1),
                               ])),
                     ])),
               ),
