@@ -27,14 +27,7 @@ class CellScreen extends ConsumerWidget {
 
     void resetTeamMoney() {
       final teamNotifier = ref.read(teamProvider.notifier);
-      final team = ref.read(teamProvider);
-      final moneyData = {team.mainCurrencyName: 0};
-      for (var i = 0; i < team.currencies.length; i++) {
-        final currency = team.currencies[i];
-        const amount = 0;
-        moneyData[currency.name] = amount;
-      }
-      teamNotifier.setMoney(moneyData);
+      teamNotifier.resetTeamMoney();
     }
 
     void showResetConfirmation() {
@@ -43,7 +36,8 @@ class CellScreen extends ConsumerWidget {
           builder: (context) {
             return AlertDialog(
               title: const Text('Подтвердите сброс'),
-              content: const Text('Обнулить данные?', style: TextStyle(fontSize: 16)),
+              content: const Text('Обнулить данные?',
+                  style: TextStyle(fontSize: 16)),
               // TODO сбросить часы, задавать в настройках кол-во часов после сброса
               actions: [
                 TextButton(
@@ -129,8 +123,8 @@ class CellScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(12.0),
                     child: Column(children: [
                       Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -138,33 +132,38 @@ class CellScreen extends ConsumerWidget {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                Text(team.getRemainders().toString(), style: currencyText1),
+                                Text(team.getRemainders().toString(),
+                                    style: currencyText1),
                               ])),
                       const Divider(height: 1, thickness: 2),
                       Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Всего часов:', style: currencyText1),
+                                const Text('Всего часов:',
+                                    style: currencyText1),
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                Text(team.getTotalHours().toString(), style: currencyText1),
+                                Text(team.getTotalHours().toString(),
+                                    style: currencyText1),
                               ])),
                       const Divider(height: 1, thickness: 2),
                       Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('За один час:', style: currencyText1),
+                                const Text('За один час:',
+                                    style: currencyText1),
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                Text(team.getPerHour().truncate().toString(), style: currencyText1),
+                                Text(team.getPerHour().truncate().toString(),
+                                    style: currencyText1),
                               ])),
                     ])),
               ),

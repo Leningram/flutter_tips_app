@@ -102,7 +102,6 @@ class _EmployeeItemState extends ConsumerState<EmployeeItem> {
         child: const Text('Сотрудник не найден'),
       );
     }
-    print(employeeData.hours);
     return InkWell(
       onTap: () => _dialogBuilder(context),
       child: Ink(

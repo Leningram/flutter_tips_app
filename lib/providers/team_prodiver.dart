@@ -106,19 +106,26 @@ class TeamNotifier extends StateNotifier<Team> {
       mainCurrencyName: state.mainCurrencyName,
       mainCurrencySum: 0,
       currencies: List.from(state.currencies),
-      employees: List.from(state.employees),
+      employees: state.employees.map((employee) {
+        if (employee.totalTips < 0) {
+          // Make a copy of the employee object and update its data
+          return Employee(
+            name: employee.name,
+            hours: employee.hours,
+            advance: -employee.totalTips,
+            image: employee.image,
+            percent: employee.percent,
+            totalTips: employee.totalTips, // Ensure totalTips remains unchanged
+          );
+        }
+        return employee; // Return unmodified employee if name doesn't match
+      }).toList(),
     );
 
     for (var currency in newState.currencies) {
       currency.amount = 0;
     }
-
     newState.countEmployeesMoney();
-    for (var employee in newState.employees) {
-      if (employee.totalTips < 0) {
-        employee.advance = -employee.totalTips;
-      }
-    }
     state = newState;
   }
 

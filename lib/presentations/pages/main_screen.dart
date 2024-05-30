@@ -19,6 +19,14 @@ class MainScreen extends ConsumerWidget {
     if (user != null) {
       userEmployee = team.employees.firstWhere(
         (employee) => employee.name == user.name,
+        orElse: () => Employee(
+          name: '',
+          advance: 0,
+          hours: 0,
+          image: '',
+          percent: 0.0,
+          totalTips: 0,
+        ),
       );
     }
 
