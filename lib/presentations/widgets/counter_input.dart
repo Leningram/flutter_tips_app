@@ -62,7 +62,6 @@ class _CounterInputState extends State<CounterInput> {
             controller: widget.controller,
             textAlign: TextAlign.center,
             keyboardType: TextInputType.number,
-            onChanged: (value) {},
             decoration: widget.label != null
                 ? InputDecoration(
                     counterText: '',

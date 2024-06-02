@@ -1,29 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/presentations/widgets/money_edit.dart';
 import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:flutter_tips_app/styles/text.styles.dart';
 
 class CellScreen extends ConsumerWidget {
-  const CellScreen({super.key});
+  const CellScreen({super.key, required this.actions});
 
+  final List<Widget> actions;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final team = ref.watch(teamProvider);
-
-    void editTeamMoney(String method) {
-      Navigator.of(context).pop();
-      showModalBottomSheet(
-        constraints: const BoxConstraints(maxWidth: 900),
-        useSafeArea: true,
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) => MoneyEdit(
-          isEdit: method == 'edit',
-        ),
-      );
-    }
 
     void resetTeamMoney() {
       final teamNotifier = ref.read(teamProvider.notifier);
@@ -58,50 +45,7 @@ class CellScreen extends ConsumerWidget {
           });
     }
 
-    Future<void> showMoneyAddChoice(BuildContext context) {
-      return showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-              content: const Text(
-                'Выберите действие',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: const Text('Изменить'),
-                  onPressed: () {
-                    editTeamMoney('edit');
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text('Добавить'),
-                  onPressed: () {
-                    editTeamMoney('add');
-                  },
-                ),
-              ],
-            );
-          });
-    }
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ячейка'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showMoneyAddChoice(context);
-            },
-            icon: const Icon(Icons.add_chart),
-          )
-        ],
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(

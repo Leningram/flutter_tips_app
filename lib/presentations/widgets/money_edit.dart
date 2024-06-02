@@ -123,17 +123,42 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                     const SizedBox(
                       height: 10,
                     ),
-                    TextField(
-                      controller: _mainCurrencyAmountController,
-                      maxLength: 6,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        label: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(team.mainCurrencyName),
+                    Material(
+                      elevation: 20,
+                      borderRadius: BorderRadius.circular(18),
+                      shadowColor: Colors.blue,
+                      color: Colors.transparent,
+                      child: TextField(
+                        controller: _mainCurrencyAmountController,
+                        maxLength: 6,
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.right,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Enter text',
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide:
+                                const BorderSide(color: Colors.transparent),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(color: Colors.grey),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          isDense: true, // уменьшает высоту TextField
                         ),
+                      
                       ),
                     ),
                     ...List.generate(
