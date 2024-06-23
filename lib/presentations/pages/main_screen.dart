@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
-import 'package:flutter_tips_app/presentations/widgets/user_info.dart';
-import 'package:flutter_tips_app/providers/team_prodiver.dart';
-import 'package:flutter_tips_app/providers/user_provider.dart';
+// import 'package:flutter_tips_app/presentations/widgets/user_info.dart';
+// import 'package:flutter_tips_app/providers/team_prodiver.dart';
+// import 'package:flutter_tips_app/providers/user_provider.dart';
 
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key, required this.actions});
@@ -12,33 +12,21 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final team = ref.watch(teamProvider);
-    final user = ref.watch(userProvider);
+    // final team = ref.watch(teamProvider);
+    // final user = ref.watch(userProvider);
     Employee? userEmployee;
-    if (user != null) {
-      userEmployee = team.employees.firstWhere(
-        (employee) => employee.name == user.name,
-        orElse: () => Employee(
-          name: '',
-          advance: 0,
-          hours: 0,
-          image: '',
-          percent: 0.0,
-          totalTips: 0,
-        ),
-      );
-    }
+ 
 
-    return Scaffold(
+    return const Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (userEmployee != null) UserInfo(user: userEmployee),
-          const Divider(
+          // if (userEmployee != null) UserInfo(user: userEmployee),
+          Divider(
             height: 1,
             thickness: 2,
           ),
-          const EmployeeList()
+          EmployeeList()
         ],
       ),
     );

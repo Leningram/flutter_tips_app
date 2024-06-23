@@ -24,25 +24,25 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     _currencyControllers = [];
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final team = ref.watch(teamProvider);
-    if (_currencyControllers.isEmpty) {
-      _currencyControllers = List.generate(
-        team.currencies.length,
-        (index) => TextEditingController(),
-      );
-      if (widget.isEdit) {
-        for (var i = 0; i < team.currencies.length; i++) {
-          _currencyControllers[i].text = team.currencies[i].amount.toString();
-        }
-      }
-    }
-    if (widget.isEdit) {
-      _mainCurrencyAmountController.text = team.mainCurrencySum.toString();
-    }
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   final team = ref.watch(teamProvider);
+  //   if (_currencyControllers.isEmpty) {
+  //     _currencyControllers = List.generate(
+  //       team.currencies.length,
+  //       (index) => TextEditingController(),
+  //     );
+  //     if (widget.isEdit) {
+  //       for (var i = 0; i < team.currencies.length; i++) {
+  //         _currencyControllers[i].text = team.currencies[i].amount.toString();
+  //       }
+  //     }
+  //   }
+  //   if (widget.isEdit) {
+  //     _mainCurrencyAmountController.text = team.mainCurrencySum.toString();
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -58,37 +58,37 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
   }
 
   void addMoney() {
-    final teamNotifier = ref.read(teamProvider.notifier);
-    final team = ref.read(teamProvider);
+    // final teamNotifier = ref.read(teamProvider.notifier);
+    // final team = ref.read(teamProvider);
 
-    final mainCurrencyAmount =
-        int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-    final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
+    // final mainCurrencyAmount =
+    //     int.tryParse(_mainCurrencyAmountController.text) ?? 0;
+    // final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
 
-    for (var i = 0; i < team.currencies.length; i++) {
-      final currency = team.currencies[i];
-      final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
-      moneyData[currency.name] = amount;
-    }
+    // for (var i = 0; i < team.currencies.length; i++) {
+    //   final currency = team.currencies[i];
+    //   final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
+    //   moneyData[currency.name] = amount;
+    // }
 
-    teamNotifier.addMoney(moneyData);
+    // teamNotifier.addMoney(moneyData);
   }
 
   void setMoney() {
-    final teamNotifier = ref.read(teamProvider.notifier);
-    final team = ref.read(teamProvider);
+    // final teamNotifier = ref.read(teamProvider.notifier);
+    // final team = ref.read(teamProvider);
 
-    final mainCurrencyAmount =
-        int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-    final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
+    // final mainCurrencyAmount =
+    //     int.tryParse(_mainCurrencyAmountController.text) ?? 0;
+    // final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
 
-    for (var i = 0; i < team.currencies.length; i++) {
-      final currency = team.currencies[i];
-      final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
-      moneyData[currency.name] = amount;
-    }
+    // for (var i = 0; i < team.currencies.length; i++) {
+    //   final currency = team.currencies[i];
+    //   final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
+    //   moneyData[currency.name] = amount;
+    // }
 
-    teamNotifier.setMoney(moneyData);
+    // teamNotifier.setMoney(moneyData);
   }
 
   void _handleOk() {
@@ -161,28 +161,28 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                       
                       ),
                     ),
-                    ...List.generate(
-                      team.currencies.length,
-                      (index) {
-                        final currency = team.currencies[index];
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: TextField(
-                            controller: _currencyControllers[index],
-                            textAlign: TextAlign.right,
-                            maxLength: 6,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              counterText: '',
-                              label: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(currency.name),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    // ...List.generate(
+                    //   team.currencies.length,
+                    //   (index) {
+                    //     final currency = team.currencies[index];
+                    //     return Padding(
+                    //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    //       child: TextField(
+                    //         controller: _currencyControllers[index],
+                    //         textAlign: TextAlign.right,
+                    //         maxLength: 6,
+                    //         keyboardType: TextInputType.number,
+                    //         decoration: InputDecoration(
+                    //           counterText: '',
+                    //           label: Align(
+                    //             alignment: Alignment.centerRight,
+                    //             child: Text(currency.name),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                     const SizedBox(
                       height: 40,
                     ),

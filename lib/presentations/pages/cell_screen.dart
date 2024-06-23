@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
+// import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:flutter_tips_app/styles/text.styles.dart';
 
@@ -10,7 +10,7 @@ class CellScreen extends ConsumerWidget {
   final List<Widget> actions;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final team = ref.watch(teamProvider);
+    // final team = ref.watch(teamProvider);
 
     void resetTeamMoney() {
       final teamNotifier = ref.read(teamProvider.notifier);
@@ -51,63 +51,63 @@ class CellScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ListInfo(
-                  items: [
-                InfoListItem(
-                    label: team.mainCurrencyName, value: team.mainCurrencySum),
-                ...team.currencies.map((el) {
-                  return InfoListItem(label: el.name, value: el.amount);
-                })
-              ].toList()),
+              // ListInfo(
+              //     items: [
+              //   InfoListItem(
+              //       label: team.mainCurrencyName, value: team.mainCurrencySum),
+              //   ...team.currencies.map((el) {
+              //     return InfoListItem(label: el.name, value: el.amount);
+              //   })
+              // ].toList()),
               const SizedBox(
                 height: 30,
               ),
-              Card(
+              const Card(
                 child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12.0),
                     child: Column(children: [
                       Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                               horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Остаток:', style: currencyText1),
-                                const SizedBox(
+                                Text('Остаток:', style: currencyText1),
+                                SizedBox(
                                   width: 5,
                                 ),
-                                Text(team.getRemainders().toString(),
-                                    style: currencyText1),
+                                // Text(team.getRemainders().toString(),
+                                //     style: currencyText1),
                               ])),
-                      const Divider(height: 1, thickness: 2),
+                      Divider(height: 1, thickness: 2),
                       Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                               horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('Всего часов:',
+                                Text('Всего часов:',
                                     style: currencyText1),
-                                const SizedBox(
+                                SizedBox(
                                   width: 5,
                                 ),
-                                Text(team.getTotalHours().toString(),
-                                    style: currencyText1),
+                                // Text(team.getTotalHours().toString(),
+                                //     style: currencyText1),
                               ])),
-                      const Divider(height: 1, thickness: 2),
+                      Divider(height: 1, thickness: 2),
                       Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                               horizontal: 0, vertical: 10),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text('За один час:',
+                                Text('За один час:',
                                     style: currencyText1),
-                                const SizedBox(
+                                SizedBox(
                                   width: 5,
                                 ),
-                                Text(team.getPerHour().truncate().toString(),
-                                    style: currencyText1),
+                                // Text(team.getPerHour().truncate().toString(),
+                                //     style: currencyText1),
                               ])),
                     ])),
               ),

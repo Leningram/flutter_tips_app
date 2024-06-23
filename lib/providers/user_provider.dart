@@ -4,7 +4,6 @@ import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
 final Employee userDefaultData = Employee(
-  id: 0,
   teamId: 0,
   name: '',
   advance: 0,
@@ -20,8 +19,8 @@ class UserNotifier extends StateNotifier<Employee?> {
   final Ref ref;
 
   void setUserById(String name) {
-    final team = ref.read(teamProvider);
-    state = team.employees.firstWhereOrNull((employee) => employee.name == name);
+    // final team = ref.read(teamProvider);
+    // state = team.employees.firstWhereOrNull((employee) => employee.name == name);
   }
 }
 

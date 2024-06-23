@@ -11,7 +11,6 @@ class Team {
   final String mainCurrencyName;
   int mainCurrencySum;
   List<Currency> currencies;
-
   Team({
     String? id,
     required this.name,
@@ -30,47 +29,50 @@ class Team {
   }
 
   int getTotalHours() {
-    int totalHours = 0;
-    for (var employee in employees) {
-      totalHours += employee.hours;
-    }
-    return totalHours;
+    return 0;
+    // int totalHours = 0;
+    // for (var employee in employees) {
+    //   totalHours += employee.hours;
+    // }
+    // return totalHours;
   }
 
   int getRemainders() {
-    int remainder = 0;
-    int totalTips = 0;
-    for (final employee in employees) {
-      totalTips += employee.totalTips;
-    }
-    int currenciesSum = 0;
-    for (final currency in currencies) {
-      currenciesSum += currency.amount * currency.rate;
-    }
+    return 0;
+    // int remainder = 0;
+    // int totalTips = 0;
+    // for (final employee in employees) {
+    //   totalTips += employee.totalTips;
+    // }
+    // int currenciesSum = 0;
+    // for (final currency in currencies) {
+    //   currenciesSum += currency.amount * currency.rate;
+    // }
 
-    int totalMoney = currenciesSum + mainCurrencySum;
-    remainder = totalMoney - totalTips;
-    return remainder;
+    // int totalMoney = currenciesSum + mainCurrencySum;
+    // remainder = totalMoney - totalTips;
+    // return remainder;
   }
 
   double getPerHour() {
-    int currenciesSum = 0;
-    int totalHours = employees.fold(0, (sum, employee) => sum + employee.hours);
-    if (totalHours == 0) {
-      return 0;
-    }
-    for (final currency in currencies) {
-      currenciesSum += currency.amount * currency.rate;
-    }
-    int totalMoney = currenciesSum + mainCurrencySum;
-    double perHour = totalMoney / totalHours;
-    return perHour;
+    return 1.0;
+    // int currenciesSum = 0;
+    // int totalHours = employees.fold(0, (sum, employee) => sum + employee.hours);
+    // if (totalHours == 0) {
+    //   return 0;
+    // }
+    // for (final currency in currencies) {
+    //   currenciesSum += currency.amount * currency.rate;
+    // }
+    // int totalMoney = currenciesSum + mainCurrencySum;
+    // double perHour = totalMoney / totalHours;
+    // return perHour;
   }
 
   void countEmployeesMoney() {
-    final perHour = getPerHour();
-    for (final employee in employees) {
-      employee.setTotalTips(perHour);
-    }
+    // final perHour = getPerHour();
+    // for (final employee in employees) {
+    //   employee.setTotalTips(perHour);
+    // }
   }
 }

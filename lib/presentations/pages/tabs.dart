@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/constants/mock.dart';
+// import 'package:flutter_tips_app/constants/mock.dart';
 import 'package:flutter_tips_app/presentations/pages/cell_screen.dart';
 import 'package:flutter_tips_app/presentations/pages/main_screen.dart';
 import 'package:flutter_tips_app/presentations/pages/settings_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/money_edit.dart';
 import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
-import 'package:flutter_tips_app/providers/team_prodiver.dart';
-import 'package:flutter_tips_app/providers/user_provider.dart';
+// import 'package:flutter_tips_app/providers/team_prodiver.dart';
+// import 'package:flutter_tips_app/providers/user_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -116,12 +116,12 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       );
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (ref.watch(teamProvider).name == '') {
-        ref.read(teamProvider.notifier).setTeam(mockTeam);
-        ref.read(userProvider.notifier).setUserById('Тимур');
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (ref.watch(teamProvider).name == '') {
+    //     ref.read(teamProvider.notifier).setTeam(mockTeam);
+    //     ref.read(userProvider.notifier).setUserById('Тимур');
+    //   }
+    // });
 
     return Scaffold(
       body: activePage,
