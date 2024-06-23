@@ -11,8 +11,8 @@ Team mockTeam = Team(
     admin: 'Тимур',
     mainCurrencyName: 'рубли',
     mainCurrencySum: 54000,
-    currencies: [dollar, euro, pounds],
-    employees: mockEmployees);
+    currencies: [dollar, euro, pounds]
+    );
 
 List<Employee> mockEmployees = [
   Employee(

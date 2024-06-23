@@ -1,6 +1,12 @@
 import 'package:flutter_tips_app/data/models/team.dart';
 
+import 'package:uuid/uuid.dart';
+
+const uuid = Uuid();
+
 class Employee {
+  String id;
+  final int teamId;
   final String name;
   int advance;
   int _hours;
@@ -10,6 +16,7 @@ class Employee {
   Team? team; // Добавляем ссылку на Team
 
   Employee({
+    required this.teamId,
     required this.name,
     required this.advance,
     required int hours,
@@ -17,7 +24,8 @@ class Employee {
     required this.percent,
     required this.totalTips,
     this.team,
-  }) : _hours = hours;
+    String? id,
+  }) :id = id ?? uuid.v4(),_hours = hours;
 
   int get hours => _hours;
 

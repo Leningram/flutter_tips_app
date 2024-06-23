@@ -4,6 +4,8 @@ import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
 final Employee userDefaultData = Employee(
+  id: 0,
+  teamId: 0,
   name: '',
   advance: 0,
   hours: 0,

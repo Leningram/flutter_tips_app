@@ -1,35 +1,25 @@
 import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
+import 'package:uuid/uuid.dart';
+
+const uuid = Uuid();
 
 class Team {
+  String? id;
   final String name;
   final String admin;
   final String mainCurrencyName;
   int mainCurrencySum;
   List<Currency> currencies;
-  List<Employee> employees;
 
   Team({
+    String? id,
     required this.name,
     required this.admin,
     required this.mainCurrencyName,
     required this.mainCurrencySum,
     required this.currencies,
-    required this.employees,
-  }) {
-    employees = employees
-        .map((e) => Employee(
-              name: e.name,
-              advance: e.advance,
-              hours: e.hours,
-              image: e.image,
-              percent: e.percent,
-              totalTips: e.totalTips,
-              team: this, // Передаем текущий объект Team
-            ))
-        .toList();
-    countEmployeesMoney(); // Вызов метода после инициализации
-  }
+  }) : id = id ?? uuid.v4();
 
   int getTeamTotal() {
     var result = mainCurrencySum;

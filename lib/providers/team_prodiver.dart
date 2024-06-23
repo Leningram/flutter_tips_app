@@ -3,17 +3,62 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
+import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:path/path.dart' as path;
+import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sqflite/sqlite_api.dart';
+
+Future<Database> getDatabase() async {
+  final dbPath = await sql.getDatabasesPath();
+  final db = await sql.openDatabase(path.join(dbPath, 'tips.db'),
+      onCreate: (db, version) async {
+    await db.execute(
+       '''
+        CREATE TABLE teams (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          admin TEXT,
+          mainCurrencyName TEXT,
+          mainCurrencySum INTEGER
+        )
+      ''');
+        await db.execute('''
+        CREATE TABLE employees (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          teamId INTEGER,
+          name TEXT,
+          advance INTEGER,
+          hours INTEGER,
+          image TEXT,
+          percent REAL,
+          totalTips INTEGER,
+          FOREIGN KEY (teamId) REFERENCES teams (id) ON DELETE CASCADE
+        )
+      ''');
+      await db.execute('''
+        CREATE TABLE currencies (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          teamId INTEGER,
+          name TEXT,
+          rate REAL,
+          amount INTEGER,
+          FOREIGN KEY (teamId) REFERENCES teams (id) ON DELETE CASCADE
+        )
+      ''');
+  }, version: 1);
+  return db;
+}
 
 class EmployeeData {
   final int hours;
   final int advance;
-
   EmployeeData(this.advance, this.hours);
 }
 
 class TeamNotifier extends StateNotifier<Team> {
   TeamNotifier()
       : super(Team(
+          id: 0,
           name: '',
           admin: '',
           mainCurrencyName: '',
@@ -33,6 +78,7 @@ class TeamNotifier extends StateNotifier<Team> {
 
   void addMoney(Map<String, int> moneyData) {
     var newState = Team(
+      id: state.id,
       name: state.name,
       admin: state.admin,
       mainCurrencyName: state.mainCurrencyName,
@@ -51,14 +97,15 @@ class TeamNotifier extends StateNotifier<Team> {
 
       var currency = newState.currencies.firstWhere(
         (c) => c.name == currencyName,
-        orElse: () => Currency(name: currencyName, rate: 1, amount: 0),
+        orElse: () => Currency(
+            teamId: newState.id, name: currencyName, rate: 1, amount: 0),
       );
 
       if (currency.name == currencyName) {
         currency.amount += amountToAdd;
       } else {
         newState.currencies
-            .add(Currency(name: currencyName, rate: 1, amount: amountToAdd));
+            .add(Currency(teamId: newState.id,  name: currencyName, rate: 1, amount: amountToAdd));
       }
     }
     newState.countEmployeesMoney();
@@ -67,12 +114,12 @@ class TeamNotifier extends StateNotifier<Team> {
 
   void setMoney(Map<String, int> moneyData) {
     var newState = Team(
+      id: state.id,
       name: state.name,
       admin: state.admin,
       mainCurrencyName: state.mainCurrencyName,
       mainCurrencySum: 0,
       currencies: List.from(state.currencies),
-      employees: List.from(state.employees),
     );
 
     if (moneyData.containsKey(newState.mainCurrencyName)) {
@@ -85,14 +132,14 @@ class TeamNotifier extends StateNotifier<Team> {
 
       var currency = newState.currencies.firstWhere(
         (c) => c.name == currencyName,
-        orElse: () => Currency(name: currencyName, rate: 1, amount: 0),
+        orElse: () => Currency(teamId: newState.id, name: currencyName, rate: 1, amount: 0),
       );
 
       if (currency.name == currencyName) {
         currency.amount = amountToAdd;
       } else {
         newState.currencies
-            .add(Currency(name: currencyName, rate: 1, amount: amountToAdd));
+            .add(Currency(teamId: newState.id, name: currencyName, rate: 1, amount: amountToAdd));
       }
     }
     newState.countEmployeesMoney();
@@ -101,6 +148,7 @@ class TeamNotifier extends StateNotifier<Team> {
 
   void resetTeamMoney() {
     var newState = Team(
+       id: state.id,
       name: state.name,
       admin: state.admin,
       mainCurrencyName: state.mainCurrencyName,
@@ -110,6 +158,8 @@ class TeamNotifier extends StateNotifier<Team> {
         if (employee.totalTips < 0) {
           // Make a copy of the employee object and update its data
           return Employee(
+            id: employee.id,
+            teamId: employee.teamId,
             name: employee.name,
             hours: employee.hours,
             advance: -employee.totalTips,
@@ -131,6 +181,7 @@ class TeamNotifier extends StateNotifier<Team> {
 
   void setEmployeeData(String name, EmployeeData data) {
     var newState = Team(
+       id: state.id,
       name: state.name,
       admin: state.admin,
       mainCurrencyName: state.mainCurrencyName,
@@ -140,6 +191,8 @@ class TeamNotifier extends StateNotifier<Team> {
         if (employee.name == name) {
           // Make a copy of the employee object and update its data
           return Employee(
+            id: employee.id,
+            teamId: employee.teamId,
             name: employee.name,
             hours: data.hours,
             advance: data.advance,
