@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tips_app/presentations/pages/new_team.dart';
+import 'package:flutter_tips_app/presentations/pages/new_team_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,10 +9,10 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   Widget? activePage;
 
   @override
