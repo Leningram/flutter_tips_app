@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/presentations/pages/new_team.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
-// import 'package:flutter_tips_app/presentations/widgets/user_info.dart';
-// import 'package:flutter_tips_app/providers/team_prodiver.dart';
-// import 'package:flutter_tips_app/providers/user_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_tips_app/providers/team_prodiver.dart';
+import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
+
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key, required this.actions}) : super(key: key);
-  final List<Widget> actions;
+  const MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -58,9 +53,28 @@ class _MainScreenState extends State<MainScreen> {
     // }
   }
 
+  void openAddEmployee() {
+    showModalBottomSheet(
+      constraints: const BoxConstraints(maxWidth: 900),
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewEmployee(onAddEmployee: (employee) {}),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                openAddEmployee();
+              },
+              icon: const Icon(Icons.person_add))
+        ],
+      ),
       body: activePage ?? const Center(child: Text('Loading...')),
     );
   }

@@ -6,10 +6,6 @@ import 'package:flutter_tips_app/presentations/pages/cell_screen.dart';
 import 'package:flutter_tips_app/presentations/pages/main_screen.dart';
 import 'package:flutter_tips_app/presentations/pages/settings_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
-import 'package:flutter_tips_app/presentations/widgets/money_edit.dart';
-import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
-// import 'package:flutter_tips_app/providers/team_prodiver.dart';
-// import 'package:flutter_tips_app/providers/user_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -36,101 +32,18 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     }
   }
 
-  void openAddEmployee() {
-    showModalBottomSheet(
-      constraints: const BoxConstraints(maxWidth: 900),
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (ctx) => NewEmployee(onAddEmployee: (employee) {}),
-    );
-  }
-
-  void editTeamMoney(String method) {
-    Navigator.of(context).pop();
-    showModalBottomSheet(
-      constraints: const BoxConstraints(maxWidth: 900),
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (ctx) => MoneyEdit(
-        isEdit: method == 'edit',
-      ),
-    );
-  }
-
-  Future<void> showMoneyAddChoice(BuildContext context) {
-    return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-            content: const Text(
-              'Выберите действие',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                child: const Text('Изменить'),
-                onPressed: () {
-                  editTeamMoney('edit');
-                },
-              ),
-              ElevatedButton(
-                child: const Text('Добавить'),
-                onPressed: () {
-                  editTeamMoney('add');
-                },
-              ),
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     Widget activePage;
 
     if (_selectedPageIndex == 0) {
-      activePage = MainScreen(
-        actions: [
-          IconButton(
-              onPressed: () {
-                openAddEmployee();
-              },
-              icon: const Icon(Icons.person_add))
-        ],
-      );
+      activePage = const MainScreen();
     } else {
-      activePage = CellScreen(
-        actions: [
-          IconButton(
-            onPressed: () {
-              showMoneyAddChoice(context);
-            },
-            icon: const Icon(Icons.add_chart),
-          )
-        ],
-      );
+      activePage = const CellScreen();
     }
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (ref.watch(teamProvider).name == '') {
-    //     ref.read(teamProvider.notifier).setTeam(mockTeam);
-    //     ref.read(userProvider.notifier).setUserById('Тимур');
-    //   }
-    // });
 
     return Scaffold(
       body: activePage,
-      appBar: AppBar(
-          actions: activePage is MainScreen
-              ? (activePage).actions
-              : (activePage as CellScreen).actions),
       drawer: MainDrawer(onSelectScreen: _setScreen),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
