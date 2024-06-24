@@ -1,6 +1,7 @@
-import 'package:collection/collection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/data/models/currency.dart';
+// import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
 
@@ -11,10 +12,24 @@ class EmployeeData {
 }
 
 class TeamNotifier extends StateNotifier<Team?> {
-  TeamNotifier(): super(null);
+  TeamNotifier() : super(null);
 
   void setTeam(Team team) {
     state = team;
+  }
+
+  void fetchTeam() async {
+   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('teams')
+        .where('adminId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    List<QueryDocumentSnapshot> docs = querySnapshot.docs;
+    List<Map<String, dynamic>> teams =
+        docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    if (teams.isNotEmpty) {
+      setTeam(teams[0]);
+    }
   }
 
   Employee? getEmployeeByName(String name) {

@@ -62,8 +62,7 @@ class CellScreen extends ConsumerWidget {
               const SizedBox(
                 height: 30,
               ),
-              const Card(
-                child: Padding(
+             const Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Column(children: [
                       Padding(
@@ -110,7 +109,7 @@ class CellScreen extends ConsumerWidget {
                                 //     style: currencyText1),
                               ])),
                     ])),
-              ),
+             
               const SizedBox(
                 height: 40,
               ),

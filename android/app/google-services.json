@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "150285441239",
+    "project_id": "tipsapp-5b3f7",
+    "storage_bucket": "tipsapp-5b3f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150285441239:android:9dff0fc984c9ece7097892",
+        "android_client_info": {
+          "package_name": "com.example.flutter_tips_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHoS8Yk5MCh_ixY8eieWQUA_0X5vfi2VY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
