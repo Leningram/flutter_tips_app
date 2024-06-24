@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_tips_app/constants/mock.dart';
 import 'package:flutter_tips_app/presentations/pages/cell_screen.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_tips_app/presentations/pages/settings_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/money_edit.dart';
 import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
-import 'package:flutter_tips_app/providers/team_prodiver.dart';
 // import 'package:flutter_tips_app/providers/team_prodiver.dart';
 // import 'package:flutter_tips_app/providers/user_provider.dart';
 
@@ -93,10 +93,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final team = ref.watch(teamProvider);
-    if (team == null) {
-      ref.read(teamProvider.notifier).fetchTeam();
-    }
     Widget activePage;
 
     if (_selectedPageIndex == 0) {
@@ -133,7 +129,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       body: activePage,
       appBar: AppBar(
           actions: activePage is MainScreen
-              ? activePage.actions
+              ? (activePage).actions
               : (activePage as CellScreen).actions),
       drawer: MainDrawer(onSelectScreen: _setScreen),
       bottomNavigationBar: BottomNavigationBar(
