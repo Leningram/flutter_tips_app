@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewTeam extends StatefulWidget {
@@ -9,7 +10,8 @@ class NewTeam extends StatefulWidget {
 }
 
 class _NewTeamState extends State<NewTeam> {
-  final _nameController = TextEditingController();
+  final _form = GlobalKey<FormState>();
+  String _enteredName = '';
 
   void _showSuccessMessage() {
     showDialog(
@@ -48,26 +50,25 @@ class _NewTeamState extends State<NewTeam> {
   }
 
   void createTeam() async {
-    final teamName = _nameController.text;
-    if (teamName.isNotEmpty) {
-      try {
-        await FirebaseFirestore.instance
-            .collection('teams')
-            .add({'name': teamName});
-        Navigator.of(context).pop();
-        _showSuccessMessage();
-      } catch (e) {
-        _showErrorMessage(e.toString());
-      }
-    } else {
-      _showErrorMessage('Название команды не может быть пустым.');
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
+      return;
     }
-  }
+    _form.currentState!.save();
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
+    try {
+      await FirebaseFirestore.instance.collection('teams').add({
+        'name': _enteredName,
+        'adminId': FirebaseAuth.instance.currentUser!.uid
+      });
+      if (!mounted) {
+        return;
+      }
+      Navigator.of(context).pop();
+      _showSuccessMessage();
+    } catch (e) {
+      _showErrorMessage(e.toString());
+    }
   }
 
   @override
@@ -80,48 +81,62 @@ class _NewTeamState extends State<NewTeam> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(16, 48, 16, keyboardSpace + 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Создать команду',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  controller: _nameController,
-                  maxLength: 15,
-                  decoration: const InputDecoration(
-                    label: Text('Название'),
+            child: Form(
+              key: _form,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Создать команду',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontSize: 18),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Отмена'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    maxLength: 15,
+                    decoration: const InputDecoration(
+                      label: Text('Название'),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    OutlinedButton(
-                      onPressed: createTeam,
-                      child: const Text('Сохранить'),
-                    ),
-                  ],
-                ),
-              ],
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Введите название';
+                      }
+                      if (value.length < 3) {
+                        return 'Минимум 3 символа';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _enteredName = value!;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Отмена'),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      OutlinedButton(
+                        onPressed: createTeam,
+                        child: const Text('Сохранить'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

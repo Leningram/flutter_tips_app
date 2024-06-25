@@ -22,35 +22,44 @@ class MainScreenState extends State<MainScreen> {
   }
 
   Future<void> fetchTeam() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('teams')
-        .where('adminId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    List<QueryDocumentSnapshot> docs = querySnapshot.docs;
-    List<Map<String, dynamic>> teams =
-        docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-    if (teams.isEmpty) {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('teams')
+          .where('adminId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .limit(1)
+          .get();
+      List<QueryDocumentSnapshot> docs = querySnapshot.docs;
+      List<Map<String, dynamic>> teams =
+          docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      if (teams.isEmpty) {
+        setState(() {
+          activePage = const NewTeamScreen();
+        });
+      } else {
+        // if (teams.isNotEmpty) {
+        //   ref.read(teamProvider.notifier).setTeam(teams[0])
+        // }
+        setState(() {
+          activePage = const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // if (userEmployee != null) UserInfo(user: userEmployee),
+              Divider(
+                height: 1,
+                thickness: 2,
+              ),
+              EmployeeList()
+            ],
+          );
+        });
+      }
+    } catch (e) {
       setState(() {
-        activePage = const NewTeamScreen();
-      });
-    } else {
-      setState(() {
-        activePage = const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // if (userEmployee != null) UserInfo(user: userEmployee),
-            Divider(
-              height: 1,
-              thickness: 2,
-            ),
-            EmployeeList()
-          ],
+        activePage = const Center(
+          child: Text('Error loading data'),
         );
       });
     }
-    // if (teams.isNotEmpty) {
-    //   ref.read(teamProvider.notifier).setTeam(teams[0])
-    // }
   }
 
   void openAddEmployee() {

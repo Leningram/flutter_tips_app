@@ -25,7 +25,7 @@ class _NewTeamScreenState extends State<NewTeamScreen> {
     return Center(
       child: ElevatedButton.icon(
         onPressed: openCreateTeamModal,
-        label: const Text('Create team'),
+        label: const Text('Создать команду'),
         icon: const Icon(Icons.add),
       ),
     );
