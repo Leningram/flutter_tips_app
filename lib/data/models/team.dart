@@ -7,14 +7,14 @@ const uuid = Uuid();
 class Team {
   String? id;
   final String name;
-  final String admin;
+  final String adminId;
   final String mainCurrencyName;
   int mainCurrencySum;
   List<Currency> currencies;
   Team({
     String? id,
     required this.name,
-    required this.admin,
+    required this.adminId,
     required this.mainCurrencyName,
     required this.mainCurrencySum,
     required this.currencies,

@@ -3,6 +3,7 @@ import 'package:flutter_tips_app/presentations/pages/new_team_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
 
 class MainScreen extends StatefulWidget {
@@ -75,6 +76,7 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MainDrawer(),
       appBar: AppBar(
         actions: [
           IconButton(

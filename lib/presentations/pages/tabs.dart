@@ -44,7 +44,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     return Scaffold(
       body: activePage,
-      drawer: MainDrawer(onSelectScreen: _setScreen),
+      drawer: const MainDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         enableFeedback: true,

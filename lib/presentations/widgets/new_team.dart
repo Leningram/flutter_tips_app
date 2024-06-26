@@ -1,15 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tips_app/data/models/team.dart';
+import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
-class NewTeam extends StatefulWidget {
+class NewTeam extends ConsumerStatefulWidget {
   const NewTeam({super.key});
 
   @override
-  State<NewTeam> createState() => _NewTeamState();
+  ConsumerState<NewTeam> createState() => _NewTeamState();
 }
 
-class _NewTeamState extends State<NewTeam> {
+class _NewTeamState extends ConsumerState<NewTeam> {
   final _form = GlobalKey<FormState>();
   String _enteredName = '';
 
@@ -17,7 +20,7 @@ class _NewTeamState extends State<NewTeam> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Успех'),
+        title: const Text('Готово'),
         content: const Text('Команда успешно создана.'),
         actions: [
           TextButton(
@@ -59,13 +62,21 @@ class _NewTeamState extends State<NewTeam> {
     try {
       await FirebaseFirestore.instance.collection('teams').add({
         'name': _enteredName,
-        'adminId': FirebaseAuth.instance.currentUser!.uid
+        'adminId': FirebaseAuth.instance.currentUser!.uid,
+        'mainCurrencyName': 'Рубли',
+        'mainCurrencySum': 0,
       });
       if (!mounted) {
         return;
       }
       Navigator.of(context).pop();
       _showSuccessMessage();
+      ref.read(teamProvider.notifier).setTeam(Team(
+          name: _enteredName,
+          adminId: FirebaseAuth.instance.currentUser!.uid,
+          mainCurrencyName: 'Рубли',
+          mainCurrencySum: 0,
+          currencies: []));
     } catch (e) {
       _showErrorMessage(e.toString());
     }
@@ -74,7 +85,6 @@ class _NewTeamState extends State<NewTeam> {
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
-
     return LayoutBuilder(builder: (builder, constraints) {
       return SizedBox(
         height: double.infinity,
@@ -99,7 +109,7 @@ class _NewTeamState extends State<NewTeam> {
                   TextFormField(
                     maxLength: 15,
                     decoration: const InputDecoration(
-                      label: Text('Название'),
+                      label: Text('Название команды'),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {

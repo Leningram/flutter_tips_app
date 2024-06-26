@@ -1,13 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tips_app/presentations/pages/settings_screen.dart';
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key, required this.onSelectScreen});
-
-  final void Function(String identifier) onSelectScreen;
+  const MainDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    void setScreen(String identifier) async {
+      Navigator.of(context).pop();
+      if (identifier == 'settings') {
+        await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (ctx) => const SettingsScreen()));
+      }
+    }
+
     return Drawer(
         child: Column(
       children: [
@@ -56,7 +63,7 @@ class MainDrawer extends StatelessWidget {
                 ),
           ),
           onTap: () {
-            onSelectScreen('main');
+            setScreen('main');
           },
         ),
         ListTile(
@@ -73,7 +80,7 @@ class MainDrawer extends StatelessWidget {
                 ),
           ),
           onTap: () {
-            onSelectScreen('settings');
+            setScreen('settings');
           },
         ),
         ListTile(
