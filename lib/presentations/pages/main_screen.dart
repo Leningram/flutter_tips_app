@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/presentations/pages/new_team_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
+import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -86,7 +88,26 @@ class MainScreenState extends State<MainScreen> {
               icon: const Icon(Icons.person_add))
         ],
       ),
-      body: activePage ?? const Center(child: Text('Loading...')),
+      body: Consumer(
+        builder: (context, ref, child) {
+          final team = ref.watch(teamProvider);
+          if (team == null) {
+            return const NewTeamScreen();
+          } else {
+            return const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // if (userEmployee != null) UserInfo(user: userEmployee),
+                Divider(
+                  height: 1,
+                  thickness: 2,
+                ),
+                EmployeeList(),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 }
