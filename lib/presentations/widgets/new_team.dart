@@ -60,11 +60,14 @@ class _NewTeamState extends ConsumerState<NewTeam> {
     _form.currentState!.save();
 
     try {
+      String id = '';
       await FirebaseFirestore.instance.collection('teams').add({
         'name': _enteredName,
         'adminId': FirebaseAuth.instance.currentUser!.uid,
         'mainCurrencyName': 'Рубли',
         'mainCurrencySum': 0,
+      }).then((DocumentReference docRef) {
+        id = docRef.id;
       });
       if (!mounted) {
         return;
@@ -73,6 +76,7 @@ class _NewTeamState extends ConsumerState<NewTeam> {
       _showSuccessMessage();
       ref.read(teamProvider.notifier).setTeam(Team(
           name: _enteredName,
+          id: id,
           adminId: FirebaseAuth.instance.currentUser!.uid,
           mainCurrencyName: 'Рубли',
           mainCurrencySum: 0,
