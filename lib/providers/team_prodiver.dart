@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
@@ -17,9 +16,7 @@ class TeamNotifier extends StateNotifier<Team?> {
     state = team;
   }
 
-  void fetchTeam() async {
-  
-  }
+  void fetchTeam() async {}
 
   Employee? getEmployeeByName(String name) {
     // return state.employees
@@ -156,6 +153,10 @@ class TeamNotifier extends StateNotifier<Team?> {
     // );
     // newState.countEmployeesMoney(); // Recalculate employee money totals
     // state = newState; // Update the state with th
+  }
+
+  void clearTeam() {
+    state = null;
   }
 }
 

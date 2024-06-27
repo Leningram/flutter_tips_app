@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/presentations/pages/settings_screen.dart';
+import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
-class MainDrawer extends StatelessWidget {
+class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     void setScreen(String identifier) async {
       Navigator.of(context).pop();
       if (identifier == 'settings') {
@@ -97,6 +99,7 @@ class MainDrawer extends StatelessWidget {
                 ),
           ),
           onTap: () {
+            ref.read(teamProvider.notifier).clearTeam();
             FirebaseAuth.instance.signOut();
           },
         )
