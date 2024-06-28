@@ -69,6 +69,7 @@ class _NewTeamState extends ConsumerState<NewTeam> {
       }).then((DocumentReference docRef) {
         id = docRef.id;
       });
+
       if (!mounted) {
         return;
       }
@@ -80,7 +81,8 @@ class _NewTeamState extends ConsumerState<NewTeam> {
           adminId: FirebaseAuth.instance.currentUser!.uid,
           mainCurrencyName: 'Рубли',
           mainCurrencySum: 0,
-          currencies: []));
+          currencies: [],
+          employees: []));
     } catch (e) {
       _showErrorMessage(e.toString());
     }

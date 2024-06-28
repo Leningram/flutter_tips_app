@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
@@ -12,11 +14,72 @@ class EmployeeData {
 class TeamNotifier extends StateNotifier<Team?> {
   TeamNotifier() : super(null);
 
+  Future<void> fetchTeam() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('teams')
+          .where('adminId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .limit(1)
+          .get();
+      List<QueryDocumentSnapshot> docs = querySnapshot.docs;
+      if (docs.isNotEmpty) {
+        DocumentSnapshot teamDoc = docs[0];
+        Map<String, dynamic> teamData = teamDoc.data() as Map<String, dynamic>;
+        String teamId = teamDoc.id;
+        QuerySnapshot employeesSnapshot = await FirebaseFirestore.instance
+            .collection('employees')
+            .where('teamId', isEqualTo: teamId)
+            .get();
+        List<QueryDocumentSnapshot> employeesDocs = employeesSnapshot.docs;
+
+        List<Employee> employees = employeesDocs.map((doc) {
+          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+          return Employee(
+            id: doc.id,
+            teamId: data['teamId'],
+            name: data['name'],
+            advance: data['advance'],
+            hours: data['hours'],
+            image: data['image'],
+            percent: data['percent'].toDouble(),
+            totalTips: data['totalTips'],
+          );
+        }).toList();
+        setTeam(Team(
+          id: teamId,
+          name: teamData['name'],
+          adminId: teamData['adminId'],
+          mainCurrencyName: teamData['mainCurrencyName'],
+          mainCurrencySum: teamData['mainCurrencySum'],
+          currencies: [], // Assuming currencies are not fetched in this example
+          employees: employees,
+        ));
+      } else {
+        state = null; // No team found
+      }
+    } catch (e, stackTrace) {
+      print('Error fetching team: $e');
+      print(stackTrace);
+      state = null; // Handle the error appropriately in your application
+    }
+  }
+
   void setTeam(Team team) {
     state = team;
   }
 
-  void fetchTeam() async {}
+  void addEmployee(Employee employee) {
+    var newState = Team(
+      id: state!.id,
+      name: state!.name,
+      adminId: state!.adminId,
+      mainCurrencyName: state!.mainCurrencyName,
+      mainCurrencySum: state!.mainCurrencySum,
+      currencies: List.from(state!.currencies),
+      employees: state!.employees,
+      // employees: List.from(state!.employees),
+    );
+  }
 
   Employee? getEmployeeByName(String name) {
     // return state.employees

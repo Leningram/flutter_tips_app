@@ -9,6 +9,8 @@ class MainDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final team = ref.watch(teamProvider);
+
     void setScreen(String identifier) async {
       Navigator.of(context).pop();
       if (identifier == 'settings') {
@@ -42,7 +44,7 @@ class MainDrawer extends ConsumerWidget {
                 width: 18,
               ),
               Text(
-                'FourSeasons',
+                team?.name ?? 'Loading...',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 24,

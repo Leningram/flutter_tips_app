@@ -9,6 +9,7 @@ class Team {
   final String name;
   final String adminId;
   final String mainCurrencyName;
+  List<Employee> employees;
   int mainCurrencySum;
   List<Currency> currencies;
   Team({
@@ -18,6 +19,7 @@ class Team {
     required this.mainCurrencyName,
     required this.mainCurrencySum,
     required this.currencies,
+    required this.employees,
   }) : id = id ?? uuid.v4();
 
   int getTeamTotal() {
