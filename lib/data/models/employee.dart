@@ -6,7 +6,7 @@ const uuid = Uuid();
 
 class Employee {
   String id;
-  final int teamId;
+  final String teamId;
   final String name;
   int advance;
   int _hours;

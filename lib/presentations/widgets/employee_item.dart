@@ -6,9 +6,9 @@ import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
 class EmployeeItem extends ConsumerStatefulWidget {
   const EmployeeItem(
-      {required this.employeeName, this.backgroundColor, super.key});
+      {required this.employeeId, this.backgroundColor, super.key});
 
-  final String employeeName;
+  final String employeeId;
   final Color? backgroundColor;
 
   @override
@@ -24,7 +24,7 @@ class _EmployeeItemState extends ConsumerState<EmployeeItem> {
     TextEditingController hoursController = TextEditingController();
     TextEditingController advanceController = TextEditingController();
     final employeeData =
-        ref.watch(teamProvider.notifier).getEmployeeByName(widget.employeeName);
+        ref.watch(teamProvider.notifier).getEmployeeById(widget.employeeId);
     if (employeeData == null) {
       // Обработка случая, если employeeData не найден
       await showDialog<void>(
@@ -94,7 +94,7 @@ class _EmployeeItemState extends ConsumerState<EmployeeItem> {
   @override
   Widget build(BuildContext context) {
     final employeeData =
-        ref.watch(teamProvider.notifier).getEmployeeByName(widget.employeeName);
+        ref.watch(teamProvider.notifier).getEmployeeById(widget.employeeId);
 
     if (employeeData == null) {
       return Container(

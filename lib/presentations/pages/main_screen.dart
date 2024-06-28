@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tips_app/data/models/team.dart';
 import 'package:flutter_tips_app/presentations/pages/new_team_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
@@ -19,7 +20,10 @@ class MainScreenState extends ConsumerState<MainScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(teamProvider.notifier).fetchTeam();
+    final team = ref.read(teamProvider);
+    if (team == null) {
+      ref.read(teamProvider.notifier).fetchTeam();
+    }
   }
 
   void openAddEmployee() {
@@ -28,7 +32,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (ctx) => NewEmployee(onAddEmployee: (employee) {}),
+      builder: (ctx) => const NewEmployee(),
     );
   }
 
@@ -47,21 +51,34 @@ class MainScreenState extends ConsumerState<MainScreen> {
       ),
       body: Consumer(
         builder: (context, ref, child) {
-          final team = ref.watch(teamProvider);
-          if (team == null) {
-            return const NewTeamScreen();
-          } else {
-            return const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Divider(
-                  height: 1,
-                  thickness: 2,
-                ),
-                EmployeeList(),
-              ],
-            );
-          }
+          final teamStream = ref.watch(teamProvider.notifier).fetchTeam();
+          return StreamBuilder<Team?>(
+            stream: teamStream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error loading data'),
+                );
+              } else if (!snapshot.hasData || snapshot.data == null) {
+                return const NewTeamScreen();
+              } else {
+                return const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Divider(
+                      height: 1,
+                      thickness: 2,
+                    ),
+                    EmployeeList(),
+                  ],
+                );
+              }
+            },
+          );
         },
       ),
     );

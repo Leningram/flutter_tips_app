@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
+import 'package:collection/collection.dart';
 
 class EmployeeData {
   final int hours;
@@ -14,7 +15,11 @@ class EmployeeData {
 class TeamNotifier extends StateNotifier<Team?> {
   TeamNotifier() : super(null);
 
-  Future<void> fetchTeam() async {
+  Stream<Team?> fetchTeam() async* {
+    if (state != null) {
+      yield (state);
+      return;
+    }
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('teams')
@@ -51,16 +56,25 @@ class TeamNotifier extends StateNotifier<Team?> {
           adminId: teamData['adminId'],
           mainCurrencyName: teamData['mainCurrencyName'],
           mainCurrencySum: teamData['mainCurrencySum'],
-          currencies: [], // Assuming currencies are not fetched in this example
+          currencies: [],
           employees: employees,
         ));
+        yield Team(
+          id: teamId,
+          name: teamData['name'],
+          adminId: teamData['adminId'],
+          mainCurrencyName: teamData['mainCurrencyName'],
+          mainCurrencySum: teamData['mainCurrencySum'],
+          currencies: [], // Assuming currencies are not fetched in this example
+          employees: employees,
+        );
       } else {
-        state = null; // No team found
+        state = null;
+        yield null;
       }
-    } catch (e, stackTrace) {
-      print('Error fetching team: $e');
-      print(stackTrace);
-      state = null; // Handle the error appropriately in your application
+    } catch (e) {
+      state = null;
+      yield null;
     }
   }
 
@@ -68,22 +82,56 @@ class TeamNotifier extends StateNotifier<Team?> {
     state = team;
   }
 
-  void addEmployee(Employee employee) {
-    var newState = Team(
-      id: state!.id,
-      name: state!.name,
-      adminId: state!.adminId,
-      mainCurrencyName: state!.mainCurrencyName,
-      mainCurrencySum: state!.mainCurrencySum,
-      currencies: List.from(state!.currencies),
-      employees: state!.employees,
-      // employees: List.from(state!.employees),
-    );
+  String? get teamId => state?.id;
+
+  Future<void> addEmployee(String name) async {
+    if (state?.id != null) {
+      try {
+        DocumentReference docRef =
+            await FirebaseFirestore.instance.collection('employees').add({
+          'teamId': state!.id,
+          'name': name,
+          'advance': 0,
+          'hours': 0,
+          'image': '',
+          'percent': 1.0,
+          'totalTips': 0,
+        });
+
+        String newEmployeeId = docRef.id;
+
+        Employee newEmployee = Employee(
+          id: newEmployeeId,
+          teamId: state!.id!,
+          name: name,
+          advance: 0,
+          hours: 0,
+          image: '',
+          percent: 1.0,
+          totalTips: 0,
+        );
+
+        var newState = Team(
+          id: state!.id,
+          name: state!.name,
+          adminId: state!.adminId,
+          mainCurrencyName: state!.mainCurrencyName,
+          mainCurrencySum: state!.mainCurrencySum,
+          currencies: List.from(state!.currencies),
+          employees: List.from(state!.employees)..add(newEmployee),
+        );
+
+        state = newState;
+      } catch (e) {
+        print('Error adding employee: $e');
+      }
+    }
   }
 
-  Employee? getEmployeeByName(String name) {
-    // return state.employees
-    //     .firstWhereOrNull((employee) => employee.name == name);
+  Employee? getEmployeeById(String id) {
+    if (state != null) {
+      return state!.employees.firstWhereOrNull((employee) => employee.id == id);
+    }
   }
 
   void addMoney(Map<String, int> moneyData) {
