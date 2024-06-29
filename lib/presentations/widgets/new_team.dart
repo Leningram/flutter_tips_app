@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tips_app/data/models/settings.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
+import 'package:flutter_tips_app/providers/settings_provider.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
 class NewTeam extends ConsumerStatefulWidget {
@@ -61,6 +63,7 @@ class _NewTeamState extends ConsumerState<NewTeam> {
 
     try {
       String id = '';
+      String settingsId = '';
       await FirebaseFirestore.instance.collection('teams').add({
         'name': _enteredName,
         'adminId': FirebaseAuth.instance.currentUser!.uid,
@@ -70,11 +73,24 @@ class _NewTeamState extends ConsumerState<NewTeam> {
         id = docRef.id;
       });
 
+      await FirebaseFirestore.instance.collection('settings').add({
+        'teamId': id,
+        'hoursDefault': 45,
+        'advanceStep': 100,
+      }).then((DocumentReference docRef) {
+        settingsId = docRef.id;
+      });
+
       if (!mounted) {
         return;
       }
-      Navigator.of(context).pop();
-      _showSuccessMessage();
+
+      ref.read(settingsProvider.notifier).setSettings(SettingsModel(
+            advanceStep: 100,
+            hoursDefault: 45,
+            id: settingsId,
+          ));
+
       ref.read(teamProvider.notifier).setTeam(Team(
           name: _enteredName,
           id: id,
@@ -83,6 +99,8 @@ class _NewTeamState extends ConsumerState<NewTeam> {
           mainCurrencySum: 0,
           currencies: [],
           employees: []));
+      Navigator.of(context).pop();
+      _showSuccessMessage();
     } catch (e) {
       _showErrorMessage(e.toString());
     }

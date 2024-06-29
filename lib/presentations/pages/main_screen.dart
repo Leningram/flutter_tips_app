@@ -55,6 +55,18 @@ class MainScreenState extends ConsumerState<MainScreen> {
           return StreamBuilder<Team?>(
             stream: teamStream,
             builder: (context, snapshot) {
+              if (ref.watch(teamProvider) != null) {
+                return const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Divider(
+                      height: 1,
+                      thickness: 2,
+                    ),
+                    EmployeeList(),
+                  ],
+                );
+              }
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(),

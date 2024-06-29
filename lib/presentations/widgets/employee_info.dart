@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/presentations/widgets/counter_input.dart';
+import 'package:flutter_tips_app/providers/settings_provider.dart';
 
-class EmployeeInfo extends StatefulWidget {
+class EmployeeInfo extends ConsumerStatefulWidget {
   const EmployeeInfo({
     super.key,
     required this.employee,
@@ -14,10 +16,10 @@ class EmployeeInfo extends StatefulWidget {
   final TextEditingController advanceController;
 
   @override
-  State<EmployeeInfo> createState() => _EmployeeInfoState();
+  ConsumerState<EmployeeInfo> createState() => _EmployeeInfoState();
 }
 
-class _EmployeeInfoState extends State<EmployeeInfo> {
+class _EmployeeInfoState extends ConsumerState<EmployeeInfo> {
   @override
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
@@ -35,7 +37,7 @@ class _EmployeeInfoState extends State<EmployeeInfo> {
               CounterInput(
                 controller: widget.advanceController,
                 label: 'Аванс',
-                step: 100,
+                step: ref.read(settingsProvider).advanceStep,
               ),
             ],
           ),

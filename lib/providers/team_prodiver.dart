@@ -37,6 +37,7 @@ class TeamNotifier extends StateNotifier<Team?> {
             .collection('employees')
             .where('teamId', isEqualTo: teamId)
             .get();
+            
         List<QueryDocumentSnapshot> employeesDocs = employeesSnapshot.docs;
 
         List<Employee> employees = employeesDocs.map((doc) {
