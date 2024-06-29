@@ -58,20 +58,20 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
   }
 
   void addMoney() {
-    // final teamNotifier = ref.read(teamProvider.notifier);
-    // final team = ref.read(teamProvider);
+    final teamNotifier = ref.read(teamProvider.notifier);
+    final team = ref.read(teamProvider);
+    if (team != null) {
+      final mainCurrencyAmount =
+          int.tryParse(_mainCurrencyAmountController.text) ?? 0;
+      final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
 
-    // final mainCurrencyAmount =
-    //     int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-    // final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
-
-    // for (var i = 0; i < team.currencies.length; i++) {
-    //   final currency = team.currencies[i];
-    //   final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
-    //   moneyData[currency.name] = amount;
-    // }
-
-    // teamNotifier.addMoney(moneyData);
+      for (var i = 0; i < team.currencies.length; i++) {
+        final currency = team.currencies[i];
+        final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
+        moneyData[currency.name] = amount;
+      }
+      teamNotifier.addMoney(moneyData);
+    }
   }
 
   void setMoney() {
@@ -158,31 +158,30 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                           ),
                           isDense: true, // уменьшает высоту TextField
                         ),
-                      
                       ),
                     ),
-                    // ...List.generate(
-                    //   team.currencies.length,
-                    //   (index) {
-                    //     final currency = team.currencies[index];
-                    //     return Padding(
-                    //       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    //       child: TextField(
-                    //         controller: _currencyControllers[index],
-                    //         textAlign: TextAlign.right,
-                    //         maxLength: 6,
-                    //         keyboardType: TextInputType.number,
-                    //         decoration: InputDecoration(
-                    //           counterText: '',
-                    //           label: Align(
-                    //             alignment: Alignment.centerRight,
-                    //             child: Text(currency.name),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
+                    ...List.generate(
+                      team!.currencies.length,
+                      (index) {
+                        final currency = team.currencies[index];
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: TextField(
+                            controller: _currencyControllers[index],
+                            textAlign: TextAlign.right,
+                            maxLength: 6,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              counterText: '',
+                              label: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(currency.name),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     const SizedBox(
                       height: 40,
                     ),

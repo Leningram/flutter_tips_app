@@ -16,8 +16,8 @@ class EmployeeItem extends ConsumerStatefulWidget {
 }
 
 class _EmployeeItemState extends ConsumerState<EmployeeItem> {
-  void editEmployeeData(String name, EmployeeData data) {
-    ref.watch(teamProvider.notifier).setEmployeeData(name, data);
+  void editEmployeeData(String id, EmployeeData data) {
+    ref.watch(teamProvider.notifier).setEmployeeData(id, data);
   }
 
   Future<void> _dialogBuilder(BuildContext context) async {
@@ -82,7 +82,7 @@ class _EmployeeItemState extends ConsumerState<EmployeeItem> {
                     int.parse(advanceController.text),
                     int.parse(hoursController.text),
                   );
-                  editEmployeeData(employeeData.name, newData);
+                  editEmployeeData(employeeData.id, newData);
                   Navigator.of(context).pop();
                 },
               ),

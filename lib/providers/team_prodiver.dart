@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:flutter_tips_app/data/models/currency.dart';
+import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
 import 'package:collection/collection.dart';
@@ -50,7 +50,7 @@ class TeamNotifier extends StateNotifier<Team?> {
             totalTips: data['totalTips'],
           );
         }).toList();
-        setTeam(Team(
+        var team = Team(
           id: teamId,
           name: teamData['name'],
           adminId: teamData['adminId'],
@@ -58,7 +58,9 @@ class TeamNotifier extends StateNotifier<Team?> {
           mainCurrencySum: teamData['mainCurrencySum'],
           currencies: [],
           employees: employees,
-        ));
+        );
+        team.countEmployeesMoney();
+        setTeam(team);
         yield Team(
           id: teamId,
           name: teamData['name'],
@@ -132,42 +134,56 @@ class TeamNotifier extends StateNotifier<Team?> {
     if (state != null) {
       return state!.employees.firstWhereOrNull((employee) => employee.id == id);
     }
+    return null;
   }
 
-  void addMoney(Map<String, int> moneyData) {
-    // var newState = Team(
-    //   id: state.id,
-    //   name: state.name,
-    //   admin: state.admin,
-    //   mainCurrencyName: state.mainCurrencyName,
-    //   mainCurrencySum: state.mainCurrencySum,
-    //   currencies: List.from(state.currencies),
-    //   employees: List.from(state.employees),
-    // );
+  Future<void> addMoney(Map<String, int> moneyData) async {
+    try {
+      int mainCurrencySum = state!.mainCurrencySum;
+      var newState = Team(
+        id: state!.id,
+        name: state!.name,
+        adminId: state!.adminId,
+        mainCurrencyName: state!.mainCurrencyName,
+        mainCurrencySum: state!.mainCurrencySum,
+        currencies: List.from(state!.currencies),
+        employees: List.from(state!.employees),
+      );
+      // await FirebaseFirestore.instance
+      //     .collection('teams')
+      //     .doc(state!.id)
+      //     .update({
+      //   'mainCurrencyName': moneyData.hours,
+      // });
 
-    // if (moneyData.containsKey(newState.mainCurrencyName)) {
-    //   newState.mainCurrencySum += moneyData[newState.mainCurrencyName]!;
-    // }
+      if (moneyData.containsKey(newState.mainCurrencyName)) {
+        mainCurrencySum += moneyData[newState.mainCurrencyName]!;
+        await FirebaseFirestore.instance
+            .collection('teams')
+            .doc(state!.id)
+            .update({
+          'mainCurrencySum': mainCurrencySum,
+        });
+        newState.mainCurrencySum = mainCurrencySum;
+      }
+      for (var entry in moneyData.entries) {
+        var currencyName = entry.key;
+        var amountToAdd = entry.value;
+        if (newState.currencies.isNotEmpty) {
+          var currency = newState.currencies.firstWhere(
+            (c) => c.name == currencyName,
+          );
 
-    // for (var entry in moneyData.entries) {
-    //   var currencyName = entry.key;
-    //   var amountToAdd = entry.value;
-
-    //   var currency = newState.currencies.firstWhere(
-    //     (c) => c.name == currencyName,
-    //     orElse: () => Currency(
-    //         teamId: newState.id, name: currencyName, rate: 1, amount: 0),
-    //   );
-
-    //   if (currency.name == currencyName) {
-    //     currency.amount += amountToAdd;
-    //   } else {
-    //     newState.currencies
-    //         .add(Currency(teamId: newState.id,  name: currencyName, rate: 1, amount: amountToAdd));
-    //   }
-    // }
-    // newState.countEmployeesMoney();
-    // state = newState;
+          if (currency.name == currencyName) {
+            currency.amount += amountToAdd;
+          }
+        }
+      }
+      newState.countEmployeesMoney();
+      state = newState;
+    } catch (error) {
+      print(error);
+    }
   }
 
   void setMoney(Map<String, int> moneyData) {
@@ -237,33 +253,41 @@ class TeamNotifier extends StateNotifier<Team?> {
     // state = newState;
   }
 
-  void setEmployeeData(String name, EmployeeData data) {
-    // var newState = Team(
-    //    id: state.id,
-    //   name: state.name,
-    //   admin: state.admin,
-    //   mainCurrencyName: state.mainCurrencyName,
-    //   mainCurrencySum: state.mainCurrencySum,
-    //   currencies: List.from(state.currencies),
-    //   employees: state.employees.map((employee) {
-    //     if (employee.name == name) {
-    //       // Make a copy of the employee object and update its data
-    //       return Employee(
-    //         id: employee.id,
-    //         teamId: employee.teamId,
-    //         name: employee.name,
-    //         hours: data.hours,
-    //         advance: data.advance,
-    //         image: employee.image,
-    //         percent: employee.percent,
-    //         totalTips: employee.totalTips, // Ensure totalTips remains unchanged
-    //       );
-    //     }
-    //     return employee; // Return unmodified employee if name doesn't match
-    //   }).toList(),
-    // );
-    // newState.countEmployeesMoney(); // Recalculate employee money totals
-    // state = newState; // Update the state with th
+  Future<void> setEmployeeData(String id, EmployeeData data) async {
+    try {
+      // Update Firestore document
+      await FirebaseFirestore.instance.collection('employees').doc(id).update({
+        'hours': data.hours,
+        'advance': data.advance,
+      });
+      var newState = Team(
+        id: state!.id,
+        name: state!.name,
+        adminId: state!.adminId,
+        mainCurrencyName: state!.mainCurrencyName,
+        mainCurrencySum: state!.mainCurrencySum,
+        currencies: List.from(state!.currencies),
+        employees: state!.employees.map((employee) {
+          if (employee.id == id) {
+            return Employee(
+              id: employee.id,
+              teamId: employee.teamId,
+              name: employee.name,
+              hours: data.hours,
+              advance: data.advance,
+              image: employee.image,
+              percent: employee.percent,
+              totalTips: employee.totalTips,
+            );
+          }
+          return employee;
+        }).toList(),
+      );
+      newState.countEmployeesMoney();
+      state = newState;
+    } catch (e) {
+      print('Error updating employee data: $e');
+    }
   }
 
   void clearTeam() {

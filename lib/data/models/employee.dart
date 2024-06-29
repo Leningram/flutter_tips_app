@@ -1,5 +1,4 @@
 import 'package:flutter_tips_app/data/models/team.dart';
-
 import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
@@ -13,7 +12,7 @@ class Employee {
   final String image;
   final double percent;
   int totalTips;
-  Team? team; // Добавляем ссылку на Team
+  Team? team;
 
   Employee({
     required this.teamId,
@@ -25,7 +24,8 @@ class Employee {
     required this.totalTips,
     this.team,
     String? id,
-  }) :id = id ?? uuid.v4(),_hours = hours;
+  })  : id = id ?? uuid.v4(),
+        _hours = hours;
 
   int get hours => _hours;
 
@@ -35,10 +35,10 @@ class Employee {
 
   set hours(int value) {
     _hours = value;
-    team?.countEmployeesMoney(); // Вызываем пересчет при изменении hours
+    team?.countEmployeesMoney();
   }
 
   void setTotalTips(double perHour) {
-    totalTips = ((_hours * perHour - advance ).floor() ~/ 10) * 10;
+    totalTips = ((_hours * perHour - advance).floor() ~/ 10) * 10;
   }
 }

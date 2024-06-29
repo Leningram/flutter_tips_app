@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
+import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/money_edit.dart';
 // import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
@@ -8,11 +10,9 @@ import 'package:flutter_tips_app/styles/text.styles.dart';
 class CellScreen extends ConsumerWidget {
   const CellScreen({super.key});
 
-
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final team = ref.watch(teamProvider);
+  Widget build(BuildContext context, ref) {
+    final team = ref.watch(teamProvider);
     void editTeamMoney(String method) {
       Navigator.of(context).pop();
       showModalBottomSheet(
@@ -91,6 +91,7 @@ class CellScreen extends ConsumerWidget {
     }
 
     return Scaffold(
+      drawer: const MainDrawer(),
       appBar: AppBar(
         actions: [
           IconButton(
@@ -106,14 +107,14 @@ class CellScreen extends ConsumerWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // ListInfo(
-              //     items: [
-              //   InfoListItem(
-              //       label: team.mainCurrencyName, value: team.mainCurrencySum),
-              //   ...team.currencies.map((el) {
-              //     return InfoListItem(label: el.name, value: el.amount);
-              //   })
-              // ].toList()),
+              ListInfo(
+                  items: [
+                InfoListItem(
+                    label: team!.mainCurrencyName, value: team.mainCurrencySum),
+                ...team.currencies.map((el) {
+                  return InfoListItem(label: el.name, value: el.amount);
+                })
+              ].toList()),
               const SizedBox(
                 height: 30,
               ),
