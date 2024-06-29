@@ -34,6 +34,19 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     super.dispose();
   }
 
+   void _updateCurrencyControllers(List<Currency> newCurrencies) {
+    // Dispose old controllers
+    for (var controller in _currencyControllers) {
+      controller.dispose();
+    }
+
+    // Create new controllers
+    _currencyControllers = List.generate(
+      newCurrencies.length,
+      (_) => TextEditingController(),
+    );
+  }
+
   void _handleClose() {
     Navigator.of(context).pop();
   }
@@ -82,7 +95,7 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
       for (var i = 0; i < team.currencies.length; i++) {
         final currency = team.currencies[i];
         final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
-        moneyData[currency.name] = amount;
+        moneyData[currency.id] = amount;
       }
       await teamNotifier.setMoney(moneyData);
     } finally {
@@ -105,6 +118,10 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
     final team = ref.watch(teamProvider);
+
+    if (team != null && team.currencies.length != _currencyControllers.length) {
+      _updateCurrencyControllers(team.currencies);
+    }
     return LayoutBuilder(
       builder: (builder, constraints) {
         return SizedBox(

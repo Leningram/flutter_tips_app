@@ -242,7 +242,6 @@ class TeamNotifier extends StateNotifier<Team?> {
 
       if (moneyData.containsKey(newState.mainCurrencyName)) {
         mainCurrencySum = moneyData[newState.mainCurrencyName]!;
-        print(mainCurrencySum);
         await FirebaseFirestore.instance
             .collection('teams')
             .doc(state!.id)
