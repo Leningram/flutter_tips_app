@@ -1,11 +1,8 @@
 import 'package:flutter_tips_app/data/models/currency.dart';
 import 'package:flutter_tips_app/data/models/employee.dart';
-import 'package:uuid/uuid.dart';
-
-const uuid = Uuid();
 
 class Team {
-  String? id;
+  String id;
   final String name;
   final String adminId;
   final String mainCurrencyName;
@@ -13,14 +10,14 @@ class Team {
   int mainCurrencySum;
   List<Currency> currencies;
   Team({
-    String? id,
+    required this.id,
     required this.name,
     required this.adminId,
     required this.mainCurrencyName,
     required this.mainCurrencySum,
     required this.currencies,
     required this.employees,
-  }) : id = id ?? uuid.v4();
+  });
 
   int getTeamTotal() {
     var result = mainCurrencySum;

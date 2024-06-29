@@ -17,32 +17,13 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
   final _mainCurrencyAmountController = TextEditingController();
   List<Currency> currencies = [];
   late List<TextEditingController> _currencyControllers;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _currencyControllers = [];
   }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final team = ref.watch(teamProvider);
-  //   if (_currencyControllers.isEmpty) {
-  //     _currencyControllers = List.generate(
-  //       team.currencies.length,
-  //       (index) => TextEditingController(),
-  //     );
-  //     if (widget.isEdit) {
-  //       for (var i = 0; i < team.currencies.length; i++) {
-  //         _currencyControllers[i].text = team.currencies[i].amount.toString();
-  //       }
-  //     }
-  //   }
-  //   if (widget.isEdit) {
-  //     _mainCurrencyAmountController.text = team.mainCurrencySum.toString();
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -57,38 +38,59 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     Navigator.of(context).pop();
   }
 
-  void addMoney() {
-    final teamNotifier = ref.read(teamProvider.notifier);
-    final team = ref.read(teamProvider);
-    if (team != null) {
+  Future<void> addMoney() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final teamNotifier = ref.read(teamProvider.notifier);
+      final team = ref.read(teamProvider);
+      if (team != null) {
+        final mainCurrencyAmount =
+            int.tryParse(_mainCurrencyAmountController.text) ?? 0;
+        final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
+
+        for (var i = 0; i < team.currencies.length; i++) {
+          final currency = team.currencies[i];
+          final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
+          moneyData[currency.name] = amount;
+        }
+        await teamNotifier.addMoney(moneyData);
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+      _handleClose();
+    }
+  }
+
+  Future<void> setMoney() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final teamNotifier = ref.read(teamProvider.notifier);
+      final team = ref.read(teamProvider);
+
       final mainCurrencyAmount =
           int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-      final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
+      final moneyData = {team!.mainCurrencyName: mainCurrencyAmount};
 
       for (var i = 0; i < team.currencies.length; i++) {
         final currency = team.currencies[i];
         final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
         moneyData[currency.name] = amount;
       }
-      teamNotifier.addMoney(moneyData);
+      await teamNotifier.setMoney(moneyData);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+      _handleClose();
     }
-  }
-
-  void setMoney() {
-    // final teamNotifier = ref.read(teamProvider.notifier);
-    // final team = ref.read(teamProvider);
-
-    // final mainCurrencyAmount =
-    //     int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-    // final moneyData = {team.mainCurrencyName: mainCurrencyAmount};
-
-    // for (var i = 0; i < team.currencies.length; i++) {
-    //   final currency = team.currencies[i];
-    //   final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
-    //   moneyData[currency.name] = amount;
-    // }
-
-    // teamNotifier.setMoney(moneyData);
   }
 
   void _handleOk() {
@@ -97,7 +99,6 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     } else {
       addMoney();
     }
-    _handleClose();
   }
 
   @override
@@ -123,42 +124,11 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Material(
-                      elevation: 20,
-                      borderRadius: BorderRadius.circular(18),
-                      shadowColor: Colors.blue,
-                      color: Colors.transparent,
-                      child: TextField(
-                        controller: _mainCurrencyAmountController,
-                        maxLength: 6,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.right,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Enter text',
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide:
-                                const BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: const BorderSide(color: Colors.red),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: const BorderSide(color: Colors.red),
-                          ),
-                          isDense: true, // уменьшает высоту TextField
-                        ),
-                      ),
+                    TextField(
+                      controller: _mainCurrencyAmountController,
+                      maxLength: 6,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.right,
                     ),
                     ...List.generate(
                       team!.currencies.length,
@@ -189,9 +159,7 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                            onPressed: () {
-                              _handleClose();
-                            },
+                            onPressed: _isLoading ? null : _handleClose,
                             child: Text('Отмена',
                                 style: TextStyle(
                                     color: Theme.of(context)
@@ -203,15 +171,18 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                           width: 20,
                         ),
                         TextButton(
-                            onPressed: () {
-                              _handleOk();
-                            },
+                            onPressed: _isLoading ? null : _handleOk,
                             child: Text(
                               widget.isEdit ? 'Сохранить' : 'Добавить',
                               style: const TextStyle(fontSize: 16),
                             ))
                       ],
-                    )
+                    ),
+                    if (_isLoading)
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    if (_isLoading) const CircularProgressIndicator(),
                   ],
                 ),
               ),
