@@ -37,7 +37,7 @@ class TeamNotifier extends StateNotifier<Team?> {
             .collection('employees')
             .where('teamId', isEqualTo: teamId)
             .get();
-            
+
         List<QueryDocumentSnapshot> employeesDocs = employeesSnapshot.docs;
 
         List<Employee> employees = employeesDocs.map((doc) {
@@ -211,11 +211,11 @@ class TeamNotifier extends StateNotifier<Team?> {
         var currencyName = entry.key;
         var amountToAdd = entry.value;
         if (newState.currencies.isNotEmpty) {
-          var currency = newState.currencies.firstWhere(
-            (c) => c.name == currencyName,
+          var currency = newState.currencies.firstWhereOrNull(
+            (c) => c.name == currencyName
           );
 
-          if (currency.name == currencyName) {
+          if (currency != null && currency.name == currencyName) {
             currency.amount += amountToAdd;
           }
         }
