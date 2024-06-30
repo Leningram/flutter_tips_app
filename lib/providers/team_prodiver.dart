@@ -217,6 +217,12 @@ class TeamNotifier extends StateNotifier<Team?> {
 
           if (currency != null && currency.name == currencyName) {
             currency.amount += amountToAdd;
+             await FirebaseFirestore.instance
+                .collection('currencies')
+                .doc(currency.id)
+                .update({
+              'amount': currency.amount,
+            });
           }
         }
       }
@@ -279,6 +285,16 @@ class TeamNotifier extends StateNotifier<Team?> {
             .update({
           'hours': 0,
           'advance': -employee.totalTips,
+        });
+      }
+    }
+    if (state!.currencies.isNotEmpty) {
+      for (final currency in state!.currencies) {
+        await FirebaseFirestore.instance
+            .collection('currencies')
+            .doc(currency.id)
+            .update({
+          'amount': 0,
         });
       }
     }
