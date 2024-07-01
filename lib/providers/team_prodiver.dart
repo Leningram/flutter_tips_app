@@ -177,6 +177,31 @@ class TeamNotifier extends StateNotifier<Team?> {
     }
   }
 
+
+  Future<void> removeCurrency(String id) async {
+    if (state?.id != null) {
+      try {
+        await FirebaseFirestore.instance.collection('currencies').doc(id).delete();
+        var updatedCurrencies = List<Currency>.from(state!.currencies)
+          ..removeWhere((currency) => currency.id == id);
+
+        var newState = Team(
+          id: state!.id,
+          name: state!.name,
+          adminId: state!.adminId,
+          mainCurrencyName: state!.mainCurrencyName,
+          mainCurrencySum: state!.mainCurrencySum,
+          currencies: updatedCurrencies,
+          employees: List.from(state!.employees),
+        );
+
+        state = newState;
+      } catch (e) {
+        print('Error removing currency: $e');
+      }
+    }
+  }
+
   Employee? getEmployeeById(String id) {
     if (state != null) {
       return state!.employees.firstWhereOrNull((employee) => employee.id == id);

@@ -38,9 +38,11 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final team = ref.watch(teamProvider);
     return Scaffold(
       drawer: const MainDrawer(),
       appBar: AppBar(
+        title: team != null ? Text(team.name) : null,
         actions: [
           IconButton(
               onPressed: () {

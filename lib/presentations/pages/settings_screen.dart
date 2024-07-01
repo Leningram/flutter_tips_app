@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
 import 'package:flutter_tips_app/providers/settings_provider.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
-import 'package:flutter_tips_app/styles/text.styles.dart';
 import 'package:flutter_tips_app/utils/formatters.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -71,6 +69,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
+Future<void> _showRemoveCurrencyDialog(String id, String name) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Удалить валюту'),
+          content: Text('Вы уверены, что хотите удалить валюту $name?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Нет'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _removeCurrency(id);
+              },
+              child: const Text('Да'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _removeCurrency(String id) async {
+    ref.read(teamProvider.notifier).removeCurrency(id);
+  }
+
   @override
   Widget build(BuildContext context) {
     final team = ref.read(teamProvider);
@@ -99,26 +128,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       label: Text('Шаг добавления в поле аванса')),
                 ),
                 const SizedBox(height: 20),
-                if (team != null)
-                  ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: team.currencies.length,
-                    itemBuilder: (context, index) {
-                      final item = team.currencies[index];
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(capitalize(item.name)),
-                        ],
-                      );
-                    },
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 1, thickness: 2),
-                  ),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: _isLoading ? null : _saveSettings,
                   child: const Text('Сохранить'),
                 ),
@@ -133,9 +146,27 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(
                   height: 30,
                 ),
+                if (team != null)
+                  ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: team.currencies.length,
+                    itemBuilder: (context, index) {
+                      final item = team.currencies[index];
+                      return Dismissible(
+                        key: ValueKey(team.currencies[index].id),
+                        onDismissed: (direction) => _showRemoveCurrencyDialog(item.id, item.name),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(capitalize(item.name)),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 1, thickness: 1),
+                  ),
                 TextButton(
                     onPressed: _isAddCurrencyLoading ? null : _addCurrency,
-                    child: const Text('Добавить'))
+                    child: const Text('Добавить')),
               ],
             ),
           ),
