@@ -140,14 +140,15 @@ class TeamNotifier extends StateNotifier<Team?> {
     }
   }
 
-  Future<void> addCurrency(String name, int rate) async {
+  Future<void> addCurrency(String name, int? rate) async {
     if (state?.id != null) {
+      final currencyRate = rate ?? 100;
       try {
         DocumentReference docRef =
             await FirebaseFirestore.instance.collection('currencies').add({
           'teamId': state!.id,
           'name': name,
-          'rate': rate,
+          'rate': currencyRate,
           'amount': 0,
         });
 
@@ -156,7 +157,7 @@ class TeamNotifier extends StateNotifier<Team?> {
         Currency newCurrency = Currency(
             teamId: state!.id,
             name: name,
-            rate: rate,
+            rate: currencyRate,
             amount: 0,
             id: newCurrencyId);
 

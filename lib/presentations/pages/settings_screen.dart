@@ -17,7 +17,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   final _form = GlobalKey<FormState>();
   late TextEditingController _hoursDefaultController;
   late TextEditingController _advanceStepController;
-  late TextEditingController _newCurrencyController;
+  late TextEditingController _newCurrencyNameController;
+  late TextEditingController _newCurrencyRateController;
 
   bool _isLoading = false;
   bool _isAddCurrencyLoading = false;
@@ -30,8 +31,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     _hoursDefaultController = TextEditingController(
       text: settings.hoursDefault.toString(),
     );
-    _newCurrencyController = TextEditingController(
+    _newCurrencyNameController = TextEditingController(
       text: '',
+    );
+    _newCurrencyRateController = TextEditingController(
+      text: '0',
     );
     _advanceStepController = TextEditingController(
       text: settings.advanceStep.toString(),
@@ -42,6 +46,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   void dispose() {
     _hoursDefaultController.dispose();
     _advanceStepController.dispose();
+    _newCurrencyNameController.dispose();
+    _newCurrencyRateController.dispose();
     super.dispose();
   }
 
@@ -59,14 +65,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _addCurrency() async {
-    if (_newCurrencyController.text.isEmpty) {
+    if (_newCurrencyNameController.text.isEmpty) {
       return;
     }
     _isAddCurrencyLoading = true;
     try {
       await ref
           .read(teamProvider.notifier)
-          .addCurrency(_newCurrencyController.text, 100);
+          .addCurrency(_newCurrencyNameController.text, int.tryParse(_newCurrencyNameController.text));
     } finally {
       _isAddCurrencyLoading = false;
     }
@@ -119,6 +125,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               children: [
                 TextFormField(
                   controller: _hoursDefaultController,
+                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                       label: Text('Кол-во часов по умолчанию')),
                 ),
@@ -127,6 +134,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ),
                 TextFormField(
                   controller: _advanceStepController,
+                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                       label: Text('Шаг добавления в поле аванса')),
                 ),
@@ -137,9 +145,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 TextButton(
                   onPressed: _isLoading ? null : _saveSettings,
                   child: const Text('Сохранить'),
-                ),
-                const SizedBox(
-                  height: 30,
                 ),
                 const SizedBox(
                   height: 30,
@@ -159,8 +164,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         child: ListTile(
                           title: Text(capitalize(item.name)),
                           trailing: TextButton.icon(
-                             style: TextButton.styleFrom(
-                              foregroundColor: Theme.of(context).colorScheme.primary,
+                            style: TextButton.styleFrom(
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.primary,
                             ),
                             onPressed: () => _showRemoveCurrencyDialog(
                                 item.id, capitalize(item.name)),
@@ -175,13 +181,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextFormField(
-                    controller: _newCurrencyController,
-                    decoration:
-                        const InputDecoration(label: Text('Добавить валюту')),
+                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 150,
+                        child: TextFormField(
+                          controller: _newCurrencyNameController,
+                          decoration: const InputDecoration(
+                              label: Text('Название валюты')),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: _newCurrencyRateController,
+                          decoration:
+                              const InputDecoration(label: Text('Курс валюты')),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 20),
                 TextButton(
                     onPressed: _isAddCurrencyLoading ? null : _addCurrency,
                     child: const Text('Добавить')),
