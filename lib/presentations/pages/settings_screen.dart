@@ -59,6 +59,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _addCurrency() async {
+    if (_newCurrencyController.text.isEmpty) {
+      return;
+    }
     _isAddCurrencyLoading = true;
     try {
       await ref
@@ -69,7 +72,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
-Future<void> _showRemoveCurrencyDialog(String id, String name) async {
+  Future<void> _showRemoveCurrencyDialog(String id, String name) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -138,11 +141,6 @@ Future<void> _showRemoveCurrencyDialog(String id, String name) async {
                 const SizedBox(
                   height: 30,
                 ),
-                TextFormField(
-                  controller: _newCurrencyController,
-                  decoration:
-                      const InputDecoration(label: Text('Добавить валюту')),
-                ),
                 const SizedBox(
                   height: 30,
                 ),
@@ -152,18 +150,35 @@ Future<void> _showRemoveCurrencyDialog(String id, String name) async {
                     itemCount: team.currencies.length,
                     itemBuilder: (context, index) {
                       final item = team.currencies[index];
-                      return Dismissible(
-                        key: ValueKey(team.currencies[index].id),
-                        onDismissed: (direction) => _showRemoveCurrencyDialog(item.id, item.name),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(capitalize(item.name)),
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                        ),
+                        child: ListTile(
+                          title: Text(capitalize(item.name)),
+                          trailing: TextButton.icon(
+                            onPressed: () => _showRemoveCurrencyDialog(
+                                item.id, capitalize(item.name)),
+                            icon: const Icon(Icons.delete),
+                            label: const Text('Удалить'),
+                          ),
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) =>
-                        const Divider(height: 1, thickness: 1),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 10,
+                    ),
                   ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFormField(
+                    controller: _newCurrencyController,
+                    decoration:
+                        const InputDecoration(label: Text('Добавить валюту')),
+                  ),
+                ),
                 TextButton(
                     onPressed: _isAddCurrencyLoading ? null : _addCurrency,
                     child: const Text('Добавить')),
