@@ -34,7 +34,7 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     super.dispose();
   }
 
-   void _updateCurrencyControllers(List<Currency> newCurrencies) {
+  void _updateCurrencyControllers(List<Currency> newCurrencies) {
     // Dispose old controllers
     for (var controller in _currencyControllers) {
       controller.dispose();
@@ -51,7 +51,7 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     Navigator.of(context).pop();
   }
 
-  Future<void> addMoney() async {
+  Future<void> changeMoney(String type) async {
     setState(() {
       _isLoading = true;
     });
@@ -67,37 +67,14 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
         for (var i = 0; i < team.currencies.length; i++) {
           final currency = team.currencies[i];
           final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
-          moneyData[currency.name] = amount;
+          moneyData[currency.id] = amount;
         }
-        await teamNotifier.addMoney(moneyData);
+        if (type == 'add') {
+          await teamNotifier.addMoney(moneyData);
+        } else if (type == 'edit') {
+          await teamNotifier.setMoney(moneyData);
+        }
       }
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-      _handleClose();
-    }
-  }
-
-  Future<void> setMoney() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final teamNotifier = ref.read(teamProvider.notifier);
-      final team = ref.read(teamProvider);
-
-      final mainCurrencyAmount =
-          int.tryParse(_mainCurrencyAmountController.text) ?? 0;
-      final moneyData = {team!.mainCurrencyName: mainCurrencyAmount};
-
-      for (var i = 0; i < team.currencies.length; i++) {
-        final currency = team.currencies[i];
-        final amount = int.tryParse(_currencyControllers[i].text) ?? 0;
-        moneyData[currency.id] = amount;
-      }
-      await teamNotifier.setMoney(moneyData);
     } finally {
       setState(() {
         _isLoading = false;
@@ -108,9 +85,9 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
 
   void _handleOk() {
     if (widget.isEdit) {
-      setMoney();
+      changeMoney('edit');
     } else {
-      addMoney();
+      changeMoney('add');
     }
   }
 

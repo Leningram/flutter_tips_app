@@ -177,11 +177,13 @@ class TeamNotifier extends StateNotifier<Team?> {
     }
   }
 
-
   Future<void> removeCurrency(String id) async {
     if (state?.id != null) {
       try {
-        await FirebaseFirestore.instance.collection('currencies').doc(id).delete();
+        await FirebaseFirestore.instance
+            .collection('currencies')
+            .doc(id)
+            .delete();
         var updatedCurrencies = List<Currency>.from(state!.currencies)
           ..removeWhere((currency) => currency.id == id);
 
@@ -233,16 +235,14 @@ class TeamNotifier extends StateNotifier<Team?> {
         newState.mainCurrencySum = mainCurrencySum;
       }
       for (var entry in moneyData.entries) {
-        var currencyName = entry.key;
+        var currencyId = entry.key;
         var amountToAdd = entry.value;
         if (newState.currencies.isNotEmpty) {
-          var currency = newState.currencies.firstWhereOrNull(
-            (c) => c.name == currencyName
-          );
-
-          if (currency != null && currency.name == currencyName) {
+          var currency =
+              newState.currencies.firstWhereOrNull((c) => c.id == currencyId);
+          if (currency != null && currency.id == currencyId) {
             currency.amount += amountToAdd;
-             await FirebaseFirestore.instance
+            await FirebaseFirestore.instance
                 .collection('currencies')
                 .doc(currency.id)
                 .update({
@@ -282,15 +282,21 @@ class TeamNotifier extends StateNotifier<Team?> {
         newState.mainCurrencySum = mainCurrencySum;
       }
       for (var entry in moneyData.entries) {
-        var currencyName = entry.key;
+        var currencyId = entry.key;
         var amountToAdd = entry.value;
         if (newState.currencies.isNotEmpty) {
-          var currency = newState.currencies.firstWhere(
-            (c) => c.name == currencyName,
+          var currency = newState.currencies.firstWhereOrNull(
+            (c) => c.id == currencyId,
           );
-
-          if (currency.name == currencyName) {
-            currency.amount += amountToAdd;
+          print(currency);
+          if (currency != null && currency.id == currencyId) {
+            currency.amount = amountToAdd;
+            await FirebaseFirestore.instance
+                .collection('currencies')
+                .doc(currency.id)
+                .update({
+              'amount': currency.amount,
+            });
           }
         }
       }

@@ -105,7 +105,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final team = ref.read(teamProvider);
+    final team = ref.watch(teamProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Настройки'),
@@ -159,6 +159,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         child: ListTile(
                           title: Text(capitalize(item.name)),
                           trailing: TextButton.icon(
+                             style: TextButton.styleFrom(
+                              foregroundColor: Theme.of(context).colorScheme.primary,
+                            ),
                             onPressed: () => _showRemoveCurrencyDialog(
                                 item.id, capitalize(item.name)),
                             icon: const Icon(Icons.delete),
