@@ -16,6 +16,8 @@ class CellScreen extends ConsumerStatefulWidget {
 }
 
 class _CellScreenState extends ConsumerState<CellScreen> {
+  bool _isLoading = false;
+
   void editTeamMoney(String method) {
     Navigator.of(context).pop();
     showModalBottomSheet(
@@ -57,10 +59,12 @@ class _CellScreenState extends ConsumerState<CellScreen> {
   }
 
   Future<void> resetTeamMoney() async {
+    _isLoading = true;
     final teamNotifier = ref.read(teamProvider.notifier);
     final settings = ref.read(settingsProvider);
     await teamNotifier.resetTeamMoney();
     await teamNotifier.resetHours(settings.hoursDefault);
+    _isLoading = false;
   }
 
   Future<void> showMoneyAddChoice(BuildContext context) {
@@ -113,79 +117,90 @@ class _CellScreenState extends ConsumerState<CellScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ListInfo(
-                  items: [
-                InfoListItem(
-                    label: team!.mainCurrencyName, value: team.mainCurrencySum),
-                ...team.currencies.map((el) {
-                  return InfoListItem(label: el.name, value: el.amount);
-                })
-              ].toList()),
-              const SizedBox(
-                height: 30,
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(children: [
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    ListInfo(
+                        items: [
+                      InfoListItem(
+                          label: team!.mainCurrencyName,
+                          value: team.mainCurrencySum),
+                      ...team.currencies.map((el) {
+                        return InfoListItem(label: el.name, value: el.amount);
+                      })
+                    ].toList()),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 10),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Остаток:', style: currencyText1),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(team.getRemainders().toString(),
-                                  style: currencyText1),
-                            ])),
-                    const Divider(height: 1, thickness: 2),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 10),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Всего часов:', style: currencyText1),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(team.getTotalHours().toString(),
-                                  style: currencyText1),
-                            ])),
-                    const Divider(height: 1, thickness: 2),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 10),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('За один час:', style: currencyText1),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(team.getPerHour().truncate().toString(),
-                                  style: currencyText1),
-                            ])),
-                  ])),
-              const SizedBox(
-                height: 40,
-              ),
-              ElevatedButton(
-                onPressed: showResetConfirmation,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.errorContainer),
-                child: Text(
-                  'Сбросить',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(children: [
+                          Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 10),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text('Остаток:',
+                                        style: currencyText1),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(team.getRemainders().toString(),
+                                        style: currencyText1),
+                                  ])),
+                          const Divider(height: 1, thickness: 2),
+                          Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 10),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text('Всего часов:',
+                                        style: currencyText1),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(team.getTotalHours().toString(),
+                                        style: currencyText1),
+                                  ])),
+                          const Divider(height: 1, thickness: 2),
+                          Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 10),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text('За один час:',
+                                        style: currencyText1),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                        team.getPerHour().truncate().toString(),
+                                        style: currencyText1),
+                                  ])),
+                        ])),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ElevatedButton(
+                      onPressed: showResetConfirmation,
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.errorContainer),
+                      child: Text(
+                        'Сбросить',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error),
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
         ),
       ),
     );
