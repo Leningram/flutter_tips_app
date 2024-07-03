@@ -308,6 +308,43 @@ class TeamNotifier extends StateNotifier<Team?> {
     }
   }
 
+  Future<void> resetHours(int hours) async {
+    for (final Employee employee in state!.employees) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('employees')
+            .doc(employee.id)
+            .update({
+          'hours': hours,
+        });
+        var newState = Team(
+          id: state!.id,
+          name: state!.name,
+          adminId: state!.adminId,
+          mainCurrencyName: state!.mainCurrencyName,
+          mainCurrencySum: 0,
+          currencies: List.from(state!.currencies),
+          employees: state!.employees.map((employee) {
+            return Employee(
+              id: employee.id,
+              teamId: employee.teamId,
+              name: employee.name,
+              hours: hours,
+              advance: employee.advance,
+              image: employee.image,
+              percent: employee.percent,
+              totalTips:
+                  employee.totalTips, // Ensure totalTips remains unchanged
+            );
+          }).toList(),
+        );
+        state = newState;
+      } catch (error) {
+        print(error);
+      }
+    }
+  }
+
   Future<void> resetTeamMoney() async {
     for (final Employee employee in state!.employees) {
       if (employee.totalTips < 0) {

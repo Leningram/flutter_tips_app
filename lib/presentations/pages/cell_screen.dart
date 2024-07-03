@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/money_edit.dart';
-// import 'package:flutter_tips_app/presentations/widgets/list_info.dart';
+import 'package:flutter_tips_app/providers/settings_provider.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:flutter_tips_app/styles/text.styles.dart';
 
@@ -58,7 +58,9 @@ class _CellScreenState extends ConsumerState<CellScreen> {
 
   Future<void> resetTeamMoney() async {
     final teamNotifier = ref.read(teamProvider.notifier);
+    final settings = ref.read(settingsProvider);
     await teamNotifier.resetTeamMoney();
+    await teamNotifier.resetHours(settings.hoursDefault);
   }
 
   Future<void> showMoneyAddChoice(BuildContext context) {
