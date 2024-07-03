@@ -55,23 +55,6 @@ class MainDrawer extends ConsumerWidget {
         ),
         ListTile(
           leading: Icon(
-            Icons.home,
-            size: 24,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          title: Text(
-            'Главная',
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 18,
-                ),
-          ),
-          onTap: () {
-            setScreen('main');
-          },
-        ),
-        ListTile(
-          leading: Icon(
             Icons.settings,
             size: 24,
             color: Theme.of(context).colorScheme.onSurface,
