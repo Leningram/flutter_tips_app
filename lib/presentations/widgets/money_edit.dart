@@ -119,6 +119,11 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                       height: 10,
                     ),
                     TextField(
+                      decoration: InputDecoration(
+                          label: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(team!.mainCurrencyName),
+                      )),
                       controller: _mainCurrencyAmountController,
                       maxLength: 6,
                       keyboardType: TextInputType.number,

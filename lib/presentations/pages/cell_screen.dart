@@ -102,6 +102,7 @@ class _CellScreenState extends ConsumerState<CellScreen> {
   @override
   Widget build(BuildContext context) {
     final team = ref.watch(teamProvider);
+    final total = ref.read(teamProvider.notifier).getTeamTotalSum();
     return Scaffold(
       drawer: const MainDrawer(),
       appBar: AppBar(
@@ -130,6 +131,27 @@ class _CellScreenState extends ConsumerState<CellScreen> {
                         return InfoListItem(label: el.name, value: el.amount);
                       })
                     ].toList()),
+                    const Divider(
+                      thickness: 2,
+                      indent: 100,
+                      endIndent: 0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                          'Итого:',
+                          style: totalText2,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '$total',
+                          style: totalText2,
+                        )
+                      ],
+                    ),
                     const SizedBox(
                       height: 30,
                     ),

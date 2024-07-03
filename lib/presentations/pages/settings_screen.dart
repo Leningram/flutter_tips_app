@@ -72,7 +72,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     try {
       await ref
           .read(teamProvider.notifier)
-          .addCurrency(_newCurrencyNameController.text, int.tryParse(_newCurrencyNameController.text));
+          .addCurrency(
+          _newCurrencyNameController.text,
+          int.tryParse(_newCurrencyRateController.text));
     } finally {
       _isAddCurrencyLoading = false;
     }

@@ -309,6 +309,17 @@ class TeamNotifier extends StateNotifier<Team?> {
     }
   }
 
+  int getTeamTotalSum() {
+    if (state == null) {
+      return 0;
+    }
+    int result = state!.mainCurrencySum;
+    for (final currency in state!.currencies) {
+      result += currency.rate * currency.amount;
+    }
+    return result;
+  }
+
   Future<void> resetHours(int hours) async {
     for (final Employee employee in state!.employees) {
       try {

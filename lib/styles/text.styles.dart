@@ -31,3 +31,10 @@ const TextStyle currencyText2 = TextStyle(
   fontWeight: FontWeight.bold,
   height: 1.0,
 );
+
+const TextStyle totalText2 = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
+  color: Color.fromARGB(130, 0, 0, 0),
+  height: 1.0,
+);
