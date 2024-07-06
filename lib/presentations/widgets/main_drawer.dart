@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/presentations/pages/settings_screen.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
+import 'package:go_router/go_router.dart';
 
 class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key});
@@ -55,6 +56,23 @@ class MainDrawer extends ConsumerWidget {
         ),
         ListTile(
           leading: Icon(
+            Icons.home,
+            size: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+          title: Text(
+            'Главная',
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 18,
+                ),
+          ),
+          onTap: () {
+            context.go('/');
+          },
+        ),
+        ListTile(
+          leading: Icon(
             Icons.settings,
             size: 24,
             color: Theme.of(context).colorScheme.onSurface,
@@ -67,7 +85,7 @@ class MainDrawer extends ConsumerWidget {
                 ),
           ),
           onTap: () {
-            setScreen('settings');
+            context.go('/settings');
           },
         ),
         ListTile(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/providers/settings_provider.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:flutter_tips_app/utils/formatters.dart';
@@ -118,6 +119,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: AppBar(
         title: const Text('Настройки'),
       ),
+      drawer: const MainDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (page) {},
         currentIndex: 0,
