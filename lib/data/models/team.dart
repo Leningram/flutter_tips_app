@@ -27,44 +27,29 @@ class Team {
     return result;
   }
 
-  int getTotalHours() {
-    int totalHours = 0;
-    for (var employee in employees) {
-      totalHours += employee.hours;
-    }
-    return totalHours;
-  }
-
   int getRemainders() {
-    int remainder = 0;
-    int totalTips = 0;
+    final totalMoney = getTeamTotal();
+    int employeesMoney = 0;
     for (final employee in employees) {
-      if (employee.totalTips > 0) {
-        totalTips += employee.totalTips;
-      }
+      employeesMoney += employee.getTotalTips();
     }
-    int currenciesSum = 0;
-    for (final currency in currencies) {
-      currenciesSum += currency.amount * currency.rate;
-    }
-
-    int totalMoney = currenciesSum + mainCurrencySum;
-    remainder = totalMoney - totalTips;
+    final remainder = totalMoney - employeesMoney;
     return remainder;
   }
 
-  double getPerHour() {
-    int currenciesSum = 0;
+  int getTotalHours() {
     int totalHours = employees.fold(0, (sum, employee) => sum + employee.hours);
+    return totalHours;
+  }
+
+  int getPerHour() {
+    int totalHours = getTotalHours();
     if (totalHours == 0) {
       return 0;
     }
-    for (final currency in currencies) {
-      currenciesSum += currency.amount * currency.rate;
-    }
-    int totalMoney = currenciesSum + mainCurrencySum;
-    double perHour = totalMoney / totalHours;
-    return perHour;
+
+    double perHour = getTeamTotal() / totalHours;
+    return perHour.truncate();
   }
 
   void countEmployeesMoney() {

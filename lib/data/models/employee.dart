@@ -38,7 +38,7 @@ class Employee {
     team?.countEmployeesMoney();
   }
 
-  void setTotalTips(double perHour) {
+  void setTotalTips(int perHour) {
     totalTips = ((_hours * perHour - advance).floor() ~/ 10) * 10;
   }
 }

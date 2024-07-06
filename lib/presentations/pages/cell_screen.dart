@@ -206,7 +206,7 @@ class _CellScreenState extends ConsumerState<CellScreen> {
                                       width: 5,
                                     ),
                                     Text(
-                                        team.getPerHour().truncate().toString(),
+                                        team.getPerHour().toString(),
                                         style: currencyText1),
                                   ])),
                         ])),
