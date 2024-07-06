@@ -118,6 +118,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       appBar: AppBar(
         title: const Text('Настройки'),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (page) {},
+        currentIndex: 0,
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Параметры'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.attach_money), label: 'Валюты'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.people), label: 'Сотрудники'),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
@@ -151,6 +163,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 const SizedBox(
                   height: 30,
                 ),
+                const Text('Валюта',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(
+                  height: 10,
+                ),
                 if (team != null)
                   ListView.separated(
                     shrinkWrap: true,
@@ -182,6 +200,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       height: 10,
                     ),
                   ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Row(
@@ -210,6 +231,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 TextButton(
                     onPressed: _isAddCurrencyLoading ? null : _addCurrency,
                     child: const Text('Добавить')),
+                if (team != null)
+                  ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: team.employees.length,
+                    itemBuilder: (context, index) {
+                      final item = team.employees[index];
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                        ),
+                        child: ListTile(
+                          title: Text(capitalize(item.name)),
+                          trailing: TextButton.icon(
+                            style: TextButton.styleFrom(
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                            ),
+                            onPressed: () => _showRemoveCurrencyDialog(
+                                item.id, capitalize(item.name)),
+                            icon: const Icon(Icons.delete),
+                            label: const Text('Удалить'),
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 10,
+                    ),
+                  ),
               ],
             ),
           ),

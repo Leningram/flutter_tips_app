@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:flutter_tips_app/constants/mock.dart';
 import 'package:flutter_tips_app/presentations/pages/cell_screen.dart';
 import 'package:flutter_tips_app/presentations/pages/main_screen.dart';
-import 'package:flutter_tips_app/presentations/pages/settings_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -22,14 +20,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     setState(() {
       _selectedPageIndex = index;
     });
-  }
-
-  void _setScreen(String identifier) async {
-    Navigator.of(context).pop();
-    if (identifier == 'settings') {
-      await Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => const SettingsScreen()));
-    }
   }
 
   @override
