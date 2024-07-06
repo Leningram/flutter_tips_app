@@ -39,7 +39,9 @@ class Team {
     int remainder = 0;
     int totalTips = 0;
     for (final employee in employees) {
-      totalTips += employee.totalTips;
+      if (employee.totalTips > 0) {
+        totalTips += employee.totalTips;
+      }
     }
     int currenciesSum = 0;
     for (final currency in currencies) {

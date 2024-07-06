@@ -186,7 +186,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 150,
                         child: TextFormField(
                           controller: _newCurrencyNameController,

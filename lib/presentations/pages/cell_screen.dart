@@ -134,23 +134,26 @@ class _CellScreenState extends ConsumerState<CellScreen> {
                     const Divider(
                       thickness: 2,
                       indent: 100,
-                      endIndent: 0,
+                      endIndent: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'Итого:',
-                          style: totalText2,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          '$total',
-                          style: totalText2,
-                        )
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Text(
+                            'Итого:',
+                            style: totalText2,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            '$total',
+                            style: totalText2,
+                          )
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 30,
