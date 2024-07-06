@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/data/models/team.dart';
@@ -6,6 +9,8 @@ import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +21,7 @@ class MainScreen extends ConsumerStatefulWidget {
 
 class MainScreenState extends ConsumerState<MainScreen> {
   Widget? activePage;
-
+  ScreenshotController screenshotController = ScreenshotController();
   @override
   void initState() {
     super.initState();
@@ -36,6 +41,11 @@ class MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
+  void takeScreenshot() async {
+    final image = await screenshotController.capture(pixelRatio: 2);
+    Share.shareXFiles([XFile.fromData(image!, mimeType: 'png')]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final team = ref.watch(teamProvider);
@@ -46,9 +56,9 @@ class MainScreenState extends ConsumerState<MainScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                openAddEmployee();
+                takeScreenshot();
               },
-              icon: const Icon(Icons.person_add))
+              icon: const Icon(CupertinoIcons.arrowshape_turn_up_right_fill))
         ],
       ),
       body: Consumer(
@@ -58,14 +68,14 @@ class MainScreenState extends ConsumerState<MainScreen> {
             stream: teamStream,
             builder: (context, snapshot) {
               if (ref.watch(teamProvider) != null) {
-                return const Column(
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Divider(
+                    const Divider(
                       height: 1,
                       thickness: 2,
                     ),
-                    EmployeeList(),
+                    EmployeeList(screenshotController: screenshotController),
                   ],
                 );
               }

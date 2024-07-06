@@ -47,8 +47,12 @@ class _CellScreenState extends ConsumerState<CellScreen> {
                 child: const Text('Отмена'),
               ),
               TextButton(
-                onPressed: () {
-                  resetTeamMoney();
+                onPressed: () async {
+                  _isLoading = true;
+                  await resetTeamMoney();
+                  if (!mounted) {
+                    return;
+                  }
                   Navigator.of(context).pop(); // Закрыть диалог
                 },
                 child: const Text('Да'),
@@ -59,7 +63,6 @@ class _CellScreenState extends ConsumerState<CellScreen> {
   }
 
   Future<void> resetTeamMoney() async {
-    _isLoading = true;
     final teamNotifier = ref.read(teamProvider.notifier);
     final settings = ref.read(settingsProvider);
     await teamNotifier.resetTeamMoney();
@@ -72,6 +75,7 @@ class _CellScreenState extends ConsumerState<CellScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            actionsOverflowAlignment: OverflowBarAlignment.center,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
             content: const Text(
@@ -205,8 +209,7 @@ class _CellScreenState extends ConsumerState<CellScreen> {
                                     const SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
-                                        team.getPerHour().toString(),
+                                    Text(team.getPerHour().toString(),
                                         style: currencyText1),
                                   ])),
                         ])),
