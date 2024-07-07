@@ -11,6 +11,7 @@ class SettingsNotifier extends StateNotifier<SettingsModel> {
   }
 
   Future<void> saveSettings(Map<String, int> data) async {
+    print(state);
     try {
       await FirebaseFirestore.instance
           .collection('settings')
