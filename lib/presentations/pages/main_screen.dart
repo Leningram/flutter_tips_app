@@ -8,6 +8,7 @@ import 'package:flutter_tips_app/presentations/pages/new_team_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
 import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
+import 'package:flutter_tips_app/providers/settings_provider.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -29,6 +30,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
     if (team == null) {
       ref.read(teamProvider.notifier).fetchTeam();
     }
+    final settings = ref.read(settingsProvider);
   }
 
   void openAddEmployee() {
@@ -48,6 +50,12 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<Team?>(teamProvider, (previousTeam, newTeam) {
+      if (newTeam != null && previousTeam == null) {
+        ref.read(settingsProvider.notifier).fetchSettings(newTeam.id);
+      }
+    });
+
     final team = ref.watch(teamProvider);
     return Scaffold(
       drawer: const MainDrawer(),

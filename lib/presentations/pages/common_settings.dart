@@ -14,17 +14,26 @@ class _CommonSettingsState extends ConsumerState<CommonSettings> {
   bool _isLoading = false;
   late TextEditingController _hoursDefaultController;
   late TextEditingController _advanceStepController;
+
   @override
   void initState() {
     super.initState();
     final settings = ref.read(settingsProvider);
-
-    _hoursDefaultController = TextEditingController(
-      text: settings.hoursDefault.toString(),
-    );
-    _advanceStepController = TextEditingController(
-      text: settings.advanceStep.toString(),
-    );
+    if (settings != null) {
+      _hoursDefaultController = TextEditingController(
+        text: settings.hoursDefault.toString(),
+      );
+      _advanceStepController = TextEditingController(
+        text: settings.advanceStep.toString(),
+      );
+    } else {
+      _hoursDefaultController = TextEditingController(
+        text: '',
+      );
+      _advanceStepController = TextEditingController(
+        text: '',
+      );
+    }
   }
 
   @override
@@ -47,7 +56,6 @@ class _CommonSettingsState extends ConsumerState<CommonSettings> {
       _isLoading = false;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

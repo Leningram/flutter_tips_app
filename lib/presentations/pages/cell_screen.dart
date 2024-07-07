@@ -66,7 +66,7 @@ class _CellScreenState extends ConsumerState<CellScreen> {
     final teamNotifier = ref.read(teamProvider.notifier);
     final settings = ref.read(settingsProvider);
     await teamNotifier.resetTeamMoney();
-    await teamNotifier.resetHours(settings.hoursDefault);
+    await teamNotifier.resetHours(settings!.hoursDefault);
     _isLoading = false;
   }
 

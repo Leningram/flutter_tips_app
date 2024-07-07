@@ -37,7 +37,7 @@ class _EmployeeInfoState extends ConsumerState<EmployeeInfo> {
               CounterInput(
                 controller: widget.advanceController,
                 label: 'Аванс',
-                step: ref.read(settingsProvider).advanceStep,
+                step: ref.read(settingsProvider)!.advanceStep,
               ),
             ],
           ),
