@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +5,6 @@ import 'package:flutter_tips_app/data/models/team.dart';
 import 'package:flutter_tips_app/presentations/pages/new_team_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_list.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
-import 'package:flutter_tips_app/presentations/widgets/new_employee.dart';
 import 'package:flutter_tips_app/providers/settings_provider.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
 import 'package:screenshot/screenshot.dart';
@@ -30,17 +27,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
     if (team == null) {
       ref.read(teamProvider.notifier).fetchTeam();
     }
-    final settings = ref.read(settingsProvider);
-  }
-
-  void openAddEmployee() {
-    showModalBottomSheet(
-      constraints: const BoxConstraints(maxWidth: 900),
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (ctx) => const NewEmployee(),
-    );
   }
 
   void takeScreenshot() async {

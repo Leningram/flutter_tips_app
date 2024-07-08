@@ -82,11 +82,6 @@ class _CurrenciesSettingsState extends ConsumerState<CurrenciesSettings> {
   Widget build(BuildContext context) {
     final team = ref.watch(teamProvider);
     return Column(children: [
-      const Text('Валюта',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      const SizedBox(
-        height: 10,
-      ),
       if (team != null)
         ListView.separated(
           shrinkWrap: true,
@@ -100,6 +95,7 @@ class _CurrenciesSettingsState extends ConsumerState<CurrenciesSettings> {
               ),
               child: ListTile(
                 title: Text(capitalize(item.name)),
+                subtitle: Text('курс: ${item.rate}'),
                 trailing: TextButton.icon(
                   style: TextButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.primary,
@@ -124,7 +120,7 @@ class _CurrenciesSettingsState extends ConsumerState<CurrenciesSettings> {
         child: Row(
           children: [
             SizedBox(
-              width: 150,
+              width: 200,
               child: TextFormField(
                 controller: _newCurrencyNameController,
                 decoration:

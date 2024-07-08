@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/data/utils/formatters.dart';
 import 'package:flutter_tips_app/presentations/widgets/employee_info.dart';
 import 'package:flutter_tips_app/providers/team_prodiver.dart';
+import 'package:flutter_tips_app/utils/formatters.dart';
 
 class EmployeeItem extends ConsumerStatefulWidget {
   const EmployeeItem(
@@ -56,7 +57,7 @@ class _EmployeeItemState extends ConsumerState<EmployeeItem> {
           return AlertDialog(
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            title: Text(employeeData.name),
+            title: Text(capitalize(employeeData.name)),
             content: EmployeeInfo(
               employee: employeeData,
               advanceController: advanceController,
@@ -121,7 +122,7 @@ class _EmployeeItemState extends ConsumerState<EmployeeItem> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            employeeData.name,
+                            capitalize(employeeData.name),
                             style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w700),
                           ),
