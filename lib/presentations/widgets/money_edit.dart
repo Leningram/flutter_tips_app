@@ -22,6 +22,10 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
   @override
   void initState() {
     super.initState();
+    if (widget.isEdit) {
+      _mainCurrencyAmountController.text =
+          ref.read(teamProvider)!.mainCurrencySum.toString();
+    }
     _currencyControllers = [];
   }
 
@@ -43,7 +47,9 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
     // Create new controllers
     _currencyControllers = List.generate(
       newCurrencies.length,
-      (_) => TextEditingController(),
+      (index) => TextEditingController(
+        text: widget.isEdit ? newCurrencies[index].amount.toString() : '',
+      ),
     );
   }
 
@@ -130,7 +136,7 @@ class _MoneyEditState extends ConsumerState<MoneyEdit> {
                       textAlign: TextAlign.right,
                     ),
                     ...List.generate(
-                      team!.currencies.length,
+                      team.currencies.length,
                       (index) {
                         final currency = team.currencies[index];
                         return Padding(

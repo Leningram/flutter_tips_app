@@ -85,7 +85,9 @@ class MainDrawer extends ConsumerWidget {
                 ),
           ),
           onTap: () {
-            context.go('/settings');
+            if (ref.read(teamProvider) != null) {
+              context.go('/settings');
+            }
           },
         ),
         ListTile(

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_tips_app/presentations/pages/cell_screen.dart';
 import 'package:flutter_tips_app/presentations/pages/main_screen.dart';
 import 'package:flutter_tips_app/presentations/widgets/main_drawer.dart';
+import 'package:flutter_tips_app/providers/team_prodiver.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -24,12 +25,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage;
+    Widget activePage = const MainScreen();
 
     if (_selectedPageIndex == 0) {
       activePage = const MainScreen();
     } else {
-      activePage = const CellScreen();
+      final team = ref.read(teamProvider);
+      if (team != null) {
+        activePage = const CellScreen();
+      }
     }
 
     return Scaffold(
