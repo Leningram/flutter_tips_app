@@ -29,6 +29,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
+
   void takeScreenshot() async {
     final image = await screenshotController.capture(pixelRatio: 2);
     Share.shareXFiles([XFile.fromData(image!, mimeType: 'png')]);
@@ -62,15 +63,18 @@ class MainScreenState extends ConsumerState<MainScreen> {
             stream: teamStream,
             builder: (context, snapshot) {
               if (ref.watch(teamProvider) != null) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Divider(
-                      height: 1,
-                      thickness: 2,
-                    ),
-                    EmployeeList(screenshotController: screenshotController),
-                  ],
+                return Screenshot(
+                  controller: screenshotController,
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(
+                        height: 1,
+                        thickness: 2,
+                      ),
+                      EmployeeList(),
+                    ],
+                  ),
                 );
               }
               if (snapshot.connectionState == ConnectionState.waiting) {

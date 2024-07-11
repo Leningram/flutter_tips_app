@@ -105,86 +105,91 @@ class _EmployeeItemState extends ConsumerState<EmployeeItem> {
     }
     return InkWell(
       onTap: () => _dialogBuilder(context),
-      child: Ink(
+      child: Container(
         decoration: BoxDecoration(
-          color: widget.backgroundColor,
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            capitalize(employeeData.name),
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
-                          ),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.watch_later_outlined),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                employeeData.hours.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 16),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            formatNumber(employeeData.getTotalTips())
-                                .toString(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                'аванс: ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(120, 0, 0, 0),
+            color: widget.backgroundColor,
+            borderRadius: const BorderRadius.all(Radius.circular(6))),
+        child: Ink(
+          decoration: BoxDecoration(
+              color: widget.backgroundColor,
+              borderRadius: const BorderRadius.all(Radius.circular(6))
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              capitalize(employeeData.name),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w700),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              children: [
+                                const Icon(Icons.watch_later_outlined),
+                                const SizedBox(
+                                  width: 5,
                                 ),
-                              ),
-                              Text(
-                                formatNumber(employeeData.advance).toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(120, 0, 0, 0),
+                                Text(
+                                  employeeData.hours.toString(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              formatNumber(employeeData.getTotalTips())
+                                  .toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Row(
+                              children: [
+                                const Text(
+                                  'аванс: ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(120, 0, 0, 0),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ],
+                                Text(
+                                  formatNumber(employeeData.advance).toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(120, 0, 0, 0),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              height: 1,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
